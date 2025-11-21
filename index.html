@@ -46,29 +46,31 @@
     .form-row {
       display: flex;
       align-items: center;
-      justify-content: center; /* Center the label and input */
+      justify-content: center;
       gap: 6px;
       margin-bottom: 6px;
       width: 100%;
     }
 
     .form-row label {
-      font-weight: normal; /* Remove bold from the labels */
+      font-weight: normal;
       width: 160px;
       text-align: left;
-      margin-right: 10px; /* Add space between label and input */
+      margin-right: 10px;
+      font-size: 12px;
+      white-space: nowrap;
     }
 
     .input-wrapper {
-      flex-grow: 1; /* Let input field grow to fill the available space */
+      flex-grow: 1;
       width: auto;
     }
 
     input {
       font-family: 'Open Sans', sans-serif;
       padding: 6px;
-      font-size: 13px; /* Slightly smaller font for input fields */
-      font-weight: normal; /* Normal font for regular fields */
+      font-size: 13px;
+      font-weight: normal;
       box-sizing: border-box;
       width: 100%;
       height: 30px;
@@ -81,20 +83,20 @@
     input[readonly] {
       background-color: #f0f0f0;
       color: #555;
-      font-weight: bold; /* Bold for readonly fields */
+      font-weight: bold;
     }
 
     #submit-container {
       display: flex;
-      justify-content: flex-end; /* Align the button to the right */
+      justify-content: flex-end;
       width: 430px;
       margin-top: 10px;
     }
 
     button {
       font-family: 'Open Sans', sans-serif;
-      padding: 8px 16px; /* Reduced padding for a smaller button */
-      font-size: 14px; /* Reduced font size for a smaller button */
+      padding: 8px 16px;
+      font-size: 14px;
       background-color: #6a1b9a;
       color: white;
       border: none;
@@ -120,7 +122,8 @@
       .form-row label {
         text-align: left;
         width: 100%;
-        padding-right: 0;
+        font-size: 13px;
+        white-space: normal;
       }
 
       .input-wrapper {
