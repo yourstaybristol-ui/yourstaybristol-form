@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Stay Bristol Payment Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      padding: 20px;
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    #logo {
+      display: block;
+      margin: 0 auto 10px auto;
+      width: 220px;
+      height: auto;
+    }
+
+    h2 {
+      font-family: 'Old Standard TT', serif;
+      color: #2c3e50;
+      font-size: 24px;
+      text-align: center;
+      margin: 0 0 10px 0;
+    }
+
+    #intro {
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #555;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    form {
+      width: 430px;
+      margin: 0 auto;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center the label and input */
+      gap: 6px;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+
+    .form-row label {
+      font-weight: normal; /* Remove bold from the labels */
+      width: 160px;
+      text-align: left;
+      margin-right: 10px; /* Add space between label and input */
+    }
+
+    .input-wrapper {
+      flex-grow: 1; /* Let input field grow to fill the available space */
+      width: auto;
+    }
+
+    input {
+      font-family: 'Open Sans', sans-serif;
+      padding: 6px;
+      font-size: 13px; /* Slightly smaller font for input fields */
+      font-weight: normal; /* Normal font for regular fields */
+      box-sizing: border-box;
+      width: 100%;
+      height: 30px;
+    }
+
+    input[maxlength="10"] {
+      width: 100px;
+    }
+
+    input[readonly] {
+      background-color: #f0f0f0;
+      color: #555;
+      font-weight: bold; /* Bold for readonly fields */
+    }
+
+    #submit-container {
+      display: flex;
+      justify-content: flex-end; /* Align the button to the right */
+      width: 430px;
+      margin-top: 10px;
+    }
+
+    button {
+      font-family: 'Open Sans', sans-serif;
+      padding: 8px 16px; /* Reduced padding for a smaller button */
+      font-size: 14px; /* Reduced font size for a smaller button */
+      background-color: #6a1b9a;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4a148c;
+    }
+
+    @media (max-width: 500px) {
+      form {
+        width: 100%;
+        padding: 0 10px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+      }
+
+      .form-row label {
+        text-align: left;
+        width: 100%;
+        padding-right: 0;
+      }
+
+      .input-wrapper {
+        width: 100%;
+      }
+
+      input {
+        width: 100% !important;
+      }
+
+      #submit-container {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="logo.png" alt="Your Stay Bristol Logo" id="logo" />
+  <h2>Your Stay Bristol Payment Form</h2>
+  <p id="intro">
+    Your Stay Bristol have requested a payment for your booking under the reference and name shown below.  
+    Please check the prefilled details, add your credit/debit card billing address and postcode, then click 'Proceed'.  
+    This will take you to a secure page to enter your card details.
+  </p>
+
+  <form>
+    <div class="form-row">
+      <label for="bookingRef">Booking Reference:</label>
+      <div class="input-wrapper">
+        <input type="text" id="bookingRef" readonly maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="guestName">Guest Name:</label>
+      <div class="input-wrapper">
+        <input type="text" id="guestName" readonly maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="paymentAmount">Payment Amount:</label>
+      <div class="input-wrapper">
+        <input type="text" id="paymentAmount" readonly maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="cardholderName">Cardholder Name:</label>
+      <div class="input-wrapper">
+        <input type="text" id="cardholderName" maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="address1">Cardholder Address 1:</label>
+      <div class="input-wrapper">
+        <input type="text" id="address1" maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="address2">Cardholder Address 2:</label>
+      <div class="input-wrapper">
+        <input type="text" id="address2" maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="address3">Cardholder Address 3:</label>
+      <div class="input-wrapper">
+        <input type="text" id="address3" maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="address4">Cardholder Address 4:</label>
+      <div class="input-wrapper">
+        <input type="text" id="address4" maxlength="25" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="postcode">Postcode:</label>
+      <div class="input-wrapper">
+        <input type="text" id="postcode" maxlength="10" />
+      </div>
+    </div>
+
+    <div id="submit-container">
+      <button type="submit">Proceed</button>
+    </div>
+  </form>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById('bookingRef').value = params.get('bookingRef') || '';
+    document.getElementById('guestName').value = params.get('guestName') || '';
+    document.getElementById('paymentAmount').value = params.get('paymentAmount') || '';
+  </script>
+</body>
+</html>
