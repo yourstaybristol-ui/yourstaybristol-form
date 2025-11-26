@@ -196,9 +196,7 @@
 
     // Conditional Source Ref field
     if (params.has('source')) {
-      const form = document.querySelector('form');
-      const note = document.getElementById('note');
-
+      const bookingRefRow = document.getElementById('bookingRef').closest('.form-row');
       const sourceName = params.get('source'); // e.g. Expedia, Airbnb, Booking.com
 
       const sourceRow = document.createElement('div');
@@ -221,7 +219,8 @@
       sourceRow.appendChild(sourceLabel);
       sourceRow.appendChild(sourceWrapper);
 
-      form.insertBefore(sourceRow, note);
+      // Insert right after the YSB Booking Ref row
+      bookingRefRow.insertAdjacentElement('afterend', sourceRow);
     }
   </script>
 
