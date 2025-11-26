@@ -212,7 +212,8 @@
       const sourceInput = document.createElement('input');
       sourceInput.type = 'text';
       sourceInput.id = 'sourceRef';
-      sourceInput.value = params.get('sourceRef') || '';
+      // Use sourceRef if present, otherwise show the source itself
+      sourceInput.value = params.get('sourceRef') || sourceName;
       sourceInput.readOnly = true;
 
       sourceWrapper.appendChild(sourceInput);
