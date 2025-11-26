@@ -8,6 +8,9 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&family=Open+Sans&display=swap" rel="stylesheet">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
   <style>
     body {
       font-family: 'Open Sans', sans-serif;
@@ -31,17 +34,7 @@
       margin: 0 0 10px 0;
     }
 
-    #intro {
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 20px;
-      color: #555;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #note {
+    #intro, #note {
       text-align: center;
       font-size: 14px;
       margin: 20px auto;
@@ -118,6 +111,23 @@
       background-color: #4a148c;
     }
 
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+    }
+
+    footer a {
+      color: #6a1b9a;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 500px) {
       form {
         width: 100%;
@@ -154,7 +164,9 @@
 </head>
 <body>
 
-  <img src="logo.png" alt="Your Stay Bristol Logo" id="logo" />
+  <a href="https://www.yourstaybristol.co.uk/" target="_blank">
+    <img src="logo.png" alt="Your Stay Bristol Logo" id="logo" />
+  </a>
 
   <h2>Your Stay Bristol Payment Form</h2>
 
@@ -192,6 +204,17 @@
       <button type="submit">Proceed</button>
     </div>
   </form>
+
+  <footer>
+    <hr style="margin-bottom:10px;">
+    <p>
+      <a href="https://www.yourstaybristol.co.uk/about-us" target="_blank">About Us</a> |
+      <a href="https://www.yourstaybristol.co.uk/locations" target="_blank">Locations</a> |
+      <a href="https://www.yourstaybristol.co.uk/terms-and-conditions" target="_blank">Terms & Conditions</a> |
+      <a href="https://www.yourstaybristol.co.uk/privacy-policy" target="_blank">Privacy Policy</a>
+    </p>
+    <p>© Your Stay Bristol Ltd</p>
+  </footer>
 
   <script>
     const params = new URLSearchParams(window.location.search);
