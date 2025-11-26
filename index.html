@@ -41,6 +41,14 @@
       margin-right: auto;
     }
 
+    #note {
+      text-align: center;
+      font-size: 14px;
+      margin: 20px auto;
+      color: #555;
+      max-width: 600px;
+    }
+
     form {
       width: 430px;
       margin: 0 auto;
@@ -55,13 +63,12 @@
       width: 100%;
     }
 
-    /* UPDATED: Keep labels on one line, prevent wrapping */
     .form-row label {
       font-weight: normal;
-      width: 170px;              /* increased from 160 */
+      width: 170px;
       text-align: left;
       margin-right: 10px;
-      font-size: 11px;           /* reduced from 12 */
+      font-size: 11px;
       white-space: nowrap;
     }
 
@@ -70,12 +77,11 @@
       width: auto;
     }
 
-    /* UPDATED: Inputs bold */
     input {
       font-family: 'Open Sans', sans-serif;
       padding: 6px;
       font-size: 13px;
-      font-weight: bold;         /* was normal */
+      font-weight: bold;
       box-sizing: border-box;
       width: 100%;
       height: 30px;
@@ -112,7 +118,6 @@
       background-color: #4a148c;
     }
 
-    /* Mobile layout */
     @media (max-width: 500px) {
       form {
         width: 100%;
@@ -155,8 +160,6 @@
 
   <p id="intro">
     Your Stay Bristol have requested a payment for your booking under the reference and name shown below.
-    Please check the prefilled details, add your credit/debit card billing address and postcode, then click 'Proceed'.
-    This will take you to a secure page to enter your card details.
   </p>
 
   <form>
@@ -181,47 +184,9 @@
       </div>
     </div>
 
-    <div class="form-row">
-      <label for="cardholderName">Cardholder Name:</label>
-      <div class="input-wrapper">
-        <input type="text" id="cardholderName" maxlength="25" />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="address1">Cardholder Address 1:</label>
-      <div class="input-wrapper">
-        <input type="text" id="address1" maxlength="25" />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="address2">Cardholder Address 2:</label>
-      <div class="input-wrapper">
-        <input type="text" id="address2" maxlength="25" />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="address3">Cardholder Address 3:</label>
-      <div class="input-wrapper">
-        <input type="text" id="address3" maxlength="25" />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="address4">Cardholder Address 4:</label>
-      <div class="input-wrapper">
-        <input type="text" id="address4" maxlength="25" />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="postcode">Postcode:</label>
-      <div class="input-wrapper">
-        <input type="text" id="postcode" maxlength="10" />
-      </div>
-    </div>
+    <p id="note">
+      Click 'Proceed' to enter your card and address details. Please make sure you use the card billing address as it is checked.
+    </p>
 
     <div id="submit-container">
       <button type="submit">Proceed</button>
