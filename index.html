@@ -23,6 +23,7 @@
     #loadingScreen { display:none; text-align:center; margin-top:40px; }
     #loadingScreen p { font-size:16px; color:#333; }
     #loadingScreen img { width:40px; height:40px; margin-top:10px; }
+    #debugBlock { margin-top:30px; font-size:13px; color:#444; background:#f9f9f9; padding:10px; border:1px solid #ccc; max-width:430px; margin-left:auto; margin-right:auto; }
     footer { margin-top:40px; text-align:center; font-size:13px; color:#555; }
     footer a { color:#6a1b9a; text-decoration:none; margin:0 8px; }
     footer a:hover { text-decoration:underline; }
@@ -64,7 +65,7 @@
     </div>
 
     <!-- Hidden fields required by Cardstream -->
-    <input type="hidden" name="merchantID" value="100001">
+    <input type="hidden" name="merchantID" value="283320">
     <input type="hidden" name="action" value="SALE">
     <input type="hidden" name="type" value="1">
     <input type="hidden" name="countryCode" value="826">
@@ -72,6 +73,7 @@
     <input type="hidden" id="amountMinor" name="amount" value="">
     <input type="hidden" id="orderRefHidden" name="orderRef" value="">
     <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success">
+    <input type="hidden" name="callbackURL" value="https://www.yourstaybristol.co.uk/payment-failed">
 
     <p id="note">
       Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details to make payment.
@@ -87,6 +89,16 @@
   <div id="loadingScreen">
     <p>Redirecting to our secure payment partner, Cardstream… please wait.</p>
     <img src="spinner.svg" alt="Loading...">
+  </div>
+
+  <!-- Debug block -->
+  <div id="debugBlock">
+    <strong>Debug Info:</strong>
+    <p>Merchant ID: <span id="debugMID"></span></p>
+    <p>Amount (minor units): <span id="debugAmount"></span></p>
+    <p>Order Ref: <span id="debugOrderRef"></span></p>
+    <p>Redirect URL: <span id="debugRedirect"></span></p>
+    <p>Callback URL: <span id="debugCallback"></span></p>
   </div>
 
   <footer>
@@ -113,11 +125,15 @@
       const amountClean = params.get('paymentAmount').replace(/[^0-9.]/g, '');
       const amountMinor = Math.round(parseFloat(amountClean) * 100);
       document.getElementById('amountMinor').value = amountMinor;
+      document.getElementById('debugAmount').textContent = amountMinor;
+      console.log("Amount (minor units):", amountMinor);
     }
 
     // Pass YSB Booking Ref into hidden orderRef
     if (params.has('bookingRef')) {
       document.getElementById('orderRefHidden').value = params.get('bookingRef');
+      document.getElementById('debugOrderRef').textContent = params.get('bookingRef');
+      console.log("Order Ref:", params.get('bookingRef'));
     }
 
     // Conditional Source Ref field
@@ -143,18 +159,4 @@
       sourceRow.appendChild(sourceLabel);
       sourceRow.appendChild(sourceWrapper);
 
-      bookingRefRow.insertAdjacentElement('afterend', sourceRow);
-    }
-
-    // Proceed button handler
-    document.getElementById('proceedButton').addEventListener('click', function () {
-      document.querySelector('form').style.display = 'none';
-      document.getElementById('loadingScreen').style.display = 'block';
-      setTimeout(function () {
-        document.querySelector('form').submit();
-      }, 2000);
-    });
-  </script>
-
-</body>
-</html>
+      bookingRefRow.insertAdjacent
