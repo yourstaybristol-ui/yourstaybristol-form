@@ -109,6 +109,7 @@
   </footer>
 
   <script>
+  document.addEventListener("DOMContentLoaded", function () {
     alert("Script is running ✅");
 
     function getParam(key) {
@@ -148,5 +149,29 @@
       sourceInput.type = 'text';
       sourceInput.readOnly = true;
       sourceInput.value = getParam('sourceRef') || getParam('source');
+
+      sourceWrapper.appendChild(sourceInput);
+      sourceRow.appendChild(sourceLabel);
+      sourceRow.appendChild(sourceWrapper);
+
+      bookingRefRow.insertAdjacentElement('afterend', sourceRow);
+    }
+
+    document.getElementById('proceedButton').addEventListener('click', function () {
+      document.querySelector('form').style.display = 'none';
+      document.getElementById('loadingScreen').style.display = 'block';
+      setTimeout(function () {
+        document.querySelector('form').submit();
+      }, 2000);
+    });
+
+    console.log("Full URL:", window.location.href);
+    console.log("Parsed paymentAmount:", getParam('paymentAmount'));
+    console.log("Parsed guestName:", getParam('guestName'));
+    console.log("Parsed bookingRef:", getParam('bookingRef'));
+    console.log("Parsed source:", getParam('source'));
+    console.log("Parsed sourceRef:", getParam('sourceRef'));
+  });
+</script>
 
      
