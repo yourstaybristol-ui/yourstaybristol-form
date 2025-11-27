@@ -20,6 +20,9 @@
     #submit-container { display:flex; justify-content:center; margin-top:20px; }
     button { padding:8px 16px; font-size:14px; background:#6a1b9a; color:#fff; border:none; cursor:pointer; }
     button:hover { background:#4a148c; }
+    #loadingScreen { display:none; text-align:center; margin-top:40px; }
+    #loadingScreen p { font-size:16px; color:#333; }
+    #loadingScreen img { width:40px; height:40px; margin-top:10px; }
     footer { margin-top:40px; text-align:center; font-size:13px; color:#555; }
     footer a { color:#6a1b9a; text-decoration:none; margin:0 8px; }
     footer a:hover { text-decoration:underline; }
@@ -37,7 +40,6 @@
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <!-- Hosted integration form -->
   <form action="https://gateway.cardstream.com/hosted/" method="post">
     <!-- Display fields -->
     <div class="form-row">
@@ -69,7 +71,7 @@
     <input type="hidden" name="currencyCode" value="826">
     <input type="hidden" id="amountMinor" name="amount" value="">
     <input type="hidden" id="orderRefHidden" name="orderRef" value="">
-    <input type="hidden" name="redirectURL" value="https://yourdomain.com/paymentReturn.html">
+    <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success">
 
     <p id="note">
       Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details to make payment.
@@ -77,9 +79,15 @@
     </p>
 
     <div id="submit-container">
-      <button type="submit">Proceed</button>
+      <button type="button" id="proceedButton">Proceed</button>
     </div>
   </form>
+
+  <!-- Loading screen -->
+  <div id="loadingScreen">
+    <p>Redirecting to our secure payment partner, Cardstream… please wait.</p>
+    <img src="spinner.svg" alt="Loading...">
+  </div>
 
   <footer>
     <hr style="margin-bottom:10px;">
@@ -137,6 +145,15 @@
 
       bookingRefRow.insertAdjacentElement('afterend', sourceRow);
     }
+
+    // Proceed button handler
+    document.getElementById('proceedButton').addEventListener('click', function () {
+      document.querySelector('form').style.display = 'none';
+      document.getElementById('loadingScreen').style.display = 'block';
+      setTimeout(function () {
+        document.querySelector('form').submit();
+      }, 2000);
+    });
   </script>
 
 </body>
