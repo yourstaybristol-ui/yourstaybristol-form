@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Stay Bristol Payment</title>
   <style>
     body {
@@ -10,36 +10,43 @@
       background-color: #fff;
       color: #444;
       padding: 20px;
-      text-align: center;
+      margin: 0;
     }
 
-    form {
-      max-width: 400px;
+    .form-wrapper {
+      max-width: 480px;
       margin: 0 auto;
+      padding: 20px;
     }
 
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 16px;
       font-weight: 600;
-      text-align: left;
+      font-size: 15px;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 8px;
-      margin-top: 5px;
+      padding: 10px;
+      margin-top: 6px;
+      font-size: 14px;
       box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
 
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      margin-top: 24px;
+      padding: 12px 24px;
       font-size: 16px;
       background-color: #6a1b9a;
       color: #fff;
       border: none;
+      border-radius: 4px;
       cursor: pointer;
+      display: block;
+      width: 100%;
     }
 
     button:hover {
@@ -48,7 +55,8 @@
 
     #spinner-container {
       display: none;
-      margin-top: 40px;
+      text-align: center;
+      margin-top: 60px;
     }
 
     img.spinner {
@@ -58,7 +66,32 @@
       margin: 20px auto;
     }
 
+    #debug {
+      margin-top: 40px;
+      font-size: 14px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 12px;
+      border-radius: 4px;
+    }
+
     @media (max-width: 600px) {
+      .form-wrapper {
+        padding: 10px;
+      }
+
+      label {
+        font-size: 14px;
+      }
+
+      input[type="text"] {
+        font-size: 13px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+
       img.spinner {
         width: 60px;
         height: 60px;
@@ -67,47 +100,93 @@
   </style>
 </head>
 <body>
-  <form action="https://checkout.cardstream.com" method="POST">
-    <label for="amount">Payment Amount</label>
-    <input type="text" id="amount" name="amount" required>
+  <div class="form-wrapper" id="form-wrapper">
+    <form action="https://checkout.cardstream.com" method="POST">
+      <label for="amount">Payment Amount</label>
+      <input type="text" id="amount" name="amount" required />
 
-    <label for="guestName">Guest Name</label>
-    <input type="text" id="guestName" name="guestName" required>
+      <label for="guestName">Guest Name</label>
+      <input type="text" id="guestName" name="guestName" required />
 
-    <label for="bookingRef">Booking Reference</label>
-    <input type="text" id="bookingRef" name="bookingRef" required>
+      <label for="bookingRef">Booking Reference</label>
+      <input type="text" id="bookingRef" name="bookingRef" required />
 
-    <label for="expediaRef">Expedia Reference</label>
-    <input type="text" id="expediaRef" name="expediaRef">
+      <label for="expediaRef">Expedia Reference</label>
+      <input type="text" id="expediaRef" name="expediaRef" />
 
-    <!-- Hidden fields -->
-    <input type="hidden" name="merchantID" value="YOUR_MERCHANT_ID">
-    <input type="hidden" name="orderRef" id="orderRef">
-    <input type="hidden" name="currencyCode" value="826">
-    <input type="hidden" name="transactionType" value="SALE">
-    <input type="hidden" name="redirectURL" value="https://yourstaybristol.com/confirmation">
-    <input type="hidden" name="callbackURL" value="https://yourstaybristol.com/callback">
+      <!-- Hidden fields -->
+      <input type="hidden" name="merchantID" value="YOUR_MERCHANT_ID" />
+      <input type="hidden" name="orderRef" id="orderRef" />
+      <input type="hidden" name="currencyCode" value="826" />
+      <input type="hidden" name="transactionType" value="SALE" />
+      <input type="hidden" name="redirectURL" value="https://yourstaybristol.com/confirmation" />
+      <input type="hidden" name="callbackURL" value="https://yourstaybristol.com/callback" />
 
-    <button type="submit" id="proceed-btn">Proceed</button>
-  </form>
+      <button type="submit" id="proceed-btn">Proceed</button>
+    </form>
+
+    <!-- Debug block -->
+    <div id="debug">
+      <strong>Debug Info:</strong><br />
+      Amount: <span id="debug-amount"></span><br />
+      Guest Name: <span id="debug-guestName"></span><br />
+      Booking Ref: <span id="debug-bookingRef"></span><br />
+      Expedia Ref: <span id="debug-expediaRef"></span><br />
+      Order Ref: <span id="debug-orderRef"></span>
+    </div>
+  </div>
 
   <!-- Spinner and redirect message -->
   <div id="spinner-container">
     <p style="font-size:18px;">Redirecting to our secure payment partner, Cardstream… please wait.</p>
     <p style="font-size:16px;">Loading...</p>
-    <img src="spinner.svg" alt="Loading..." class="spinner">
+    <img src="spinner.svg" alt="Loading..." class="spinner" />
   </div>
 
   <script>
-    document.getElementById('proceed-btn').addEventListener('click', function() {
-      document.querySelector('form').style.display = 'none';
-      document.getElementById('spinner-container').style.display = 'block';
+    // Show spinner after clicking Proceed
+    document.getElementById("proceed-btn").addEventListener("click", function () {
+      document.getElementById("form-wrapper").style.display = "none";
+      document.getElementById("spinner-container").style.display = "block";
+      console.log("Proceed clicked. Showing spinner.");
     });
 
-    // Optional: auto-generate orderRef from bookingRef
-    document.getElementById('bookingRef').addEventListener('input', function() {
-      document.getElementById('orderRef').value = this.value + "-YSB";
+    // Auto-populate orderRef from bookingRef
+    document.getElementById("bookingRef").addEventListener("input", function () {
+      const ref = this.value;
+      document.getElementById("orderRef").value = ref + "-YSB";
+      document.getElementById("debug-orderRef").textContent = ref + "-YSB";
+      console.log("orderRef set to:", ref + "-YSB");
     });
+
+    // Prefill fields from query string
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("amount")) {
+      const val = params.get("amount");
+      document.getElementById("amount").value = val;
+      document.getElementById("debug-amount").textContent = val;
+      console.log("amount:", val);
+    }
+    if (params.has("guestName")) {
+      const val = params.get("guestName");
+      document.getElementById("guestName").value = val;
+      document.getElementById("debug-guestName").textContent = val;
+      console.log("guestName:", val);
+    }
+    if (params.has("bookingRef")) {
+      const val = params.get("bookingRef");
+      document.getElementById("bookingRef").value = val;
+      document.getElementById("orderRef").value = val + "-YSB";
+      document.getElementById("debug-bookingRef").textContent = val;
+      document.getElementById("debug-orderRef").textContent = val + "-YSB";
+      console.log("bookingRef:", val);
+    }
+    if (params.has("expediaRef")) {
+      const val = params.get("expediaRef");
+      document.getElementById("expediaRef").value = val;
+      document.getElementById("debug-expediaRef").textContent = val;
+      console.log("expediaRef:", val);
+    }
   </script>
 </body>
 </html>
