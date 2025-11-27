@@ -138,12 +138,13 @@
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <form>
+  <!-- Form posts to PHP script -->
+  <form action="processPayment.php" method="post">
     <!-- Payment Amount first -->
     <div class="form-row">
       <label for="paymentAmount">Payment Amount:</label>
       <div class="input-wrapper">
-        <input type="text" id="paymentAmount" readonly maxlength="25" />
+        <input type="text" id="paymentAmount" name="paymentAmount" readonly maxlength="25" />
       </div>
     </div>
 
@@ -151,7 +152,7 @@
     <div class="form-row">
       <label for="guestName">Guest Name:</label>
       <div class="input-wrapper">
-        <input type="text" id="guestName" readonly maxlength="25" />
+        <input type="text" id="guestName" name="guestName" readonly maxlength="25" />
       </div>
     </div>
 
@@ -159,7 +160,7 @@
     <div class="form-row">
       <label for="bookingRef">YSB Booking Ref:</label>
       <div class="input-wrapper">
-        <input type="text" id="bookingRef" readonly maxlength="25" />
+        <input type="text" id="bookingRef" name="bookingRef" readonly maxlength="25" />
       </div>
     </div>
 
@@ -212,6 +213,7 @@
       const sourceInput = document.createElement('input');
       sourceInput.type = 'text';
       sourceInput.id = 'sourceRef';
+      sourceInput.name = 'sourceRef';
       // Use sourceRef if present, otherwise show the source itself
       sourceInput.value = params.get('sourceRef') || sourceName;
       sourceInput.readOnly = true;
