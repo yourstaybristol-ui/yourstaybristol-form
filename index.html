@@ -4,126 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Stay Bristol: Make a Payment</title>
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&family=Open+Sans&display=swap" rel="stylesheet">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png" />
-
   <style>
-    body {
-      font-family: 'Open Sans', sans-serif;
-      padding: 20px;
-      background-color: #ffffff;
-      color: #333;
-    }
-
-    #logo {
-      display: block;
-      margin: 0 auto 10px auto;
-      width: 220px;
-      height: auto;
-    }
-
-    h2 {
-      font-family: 'Old Standard TT', serif;
-      color: #2c3e50;
-      font-size: 24px;
-      text-align: center;
-      margin: 0 0 10px 0;
-    }
-
-    #intro, #note {
-      text-align: center;
-      font-size: 14px;
-      margin: 20px auto;
-      color: #555;
-      max-width: 600px;
-    }
-
-    form {
-      width: 430px;
-      margin: 0 auto;
-    }
-
-    .form-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 6px;
-      width: 100%;
-    }
-
-    .form-row label {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 14px;
-      font-weight: normal;
-      width: 170px;
-      text-align: left;
-      margin-right: 10px;
-      white-space: nowrap;
-    }
-
-    .input-wrapper {
-      flex-grow: 1;
-      width: auto;
-    }
-
-    input {
-      font-family: 'Open Sans', sans-serif;
-      padding: 6px;
-      font-size: 13px;
-      font-weight: bold;
-      box-sizing: border-box;
-      width: 100%;
-      height: 30px;
-    }
-
-    input[readonly] {
-      background-color: #f0f0f0;
-      color: #555;
-      font-weight: bold;
-    }
-
-    #submit-container {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    button {
-      font-family: 'Open Sans', sans-serif;
-      padding: 8px 16px;
-      font-size: 14px;
-      background-color: #6a1b9a;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #4a148c;
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 13px;
-      color: #555;
-    }
-
-    footer a {
-      color: #6a1b9a;
-      text-decoration: none;
-      margin: 0 8px;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
+    body { font-family: 'Open Sans', sans-serif; padding: 20px; background:#fff; color:#333; }
+    #logo { display:block; margin:0 auto 10px; width:220px; }
+    h2 { font-family:'Old Standard TT', serif; color:#2c3e50; font-size:24px; text-align:center; margin:0 0 10px; }
+    #intro,#note { text-align:center; font-size:14px; margin:20px auto; color:#555; max-width:600px; }
+    form { width:430px; margin:0 auto; }
+    .form-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+    .form-row label { width:170px; font-size:14px; text-align:left; margin-right:10px; }
+    .input-wrapper { flex-grow:1; }
+    input { font-family:'Open Sans'; padding:6px; font-size:13px; font-weight:bold; width:100%; height:30px; }
+    input[readonly] { background:#f0f0f0; color:#555; }
+    #submit-container { display:flex; justify-content:center; margin-top:20px; }
+    button { padding:8px 16px; font-size:14px; background:#6a1b9a; color:#fff; border:none; cursor:pointer; }
+    button:hover { background:#4a148c; }
+    footer { margin-top:40px; text-align:center; font-size:13px; color:#555; }
+    footer a { color:#6a1b9a; text-decoration:none; margin:0 8px; }
+    footer a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
@@ -138,33 +37,39 @@
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <!-- Form posts to PHP script -->
-  <form action="processPayment.php" method="post">
-    <!-- Payment Amount first -->
+  <!-- Hosted integration form -->
+  <form action="https://gateway.cardstream.com/hosted/" method="post">
+    <!-- Display fields -->
     <div class="form-row">
       <label for="paymentAmount">Payment Amount:</label>
       <div class="input-wrapper">
-        <input type="text" id="paymentAmount" name="paymentAmount" readonly maxlength="25" />
+        <input type="text" id="paymentAmount" readonly />
       </div>
     </div>
 
-    <!-- Guest Name second -->
     <div class="form-row">
       <label for="guestName">Guest Name:</label>
       <div class="input-wrapper">
-        <input type="text" id="guestName" name="guestName" readonly maxlength="25" />
+        <input type="text" id="guestName" readonly />
       </div>
     </div>
 
-    <!-- YSB Booking Ref third -->
     <div class="form-row">
       <label for="bookingRef">YSB Booking Ref:</label>
       <div class="input-wrapper">
-        <input type="text" id="bookingRef" name="bookingRef" readonly maxlength="25" />
+        <input type="text" id="bookingRef" readonly />
       </div>
     </div>
 
-    <!-- Conditional fields will be injected here -->
+    <!-- Hidden fields required by Cardstream -->
+    <input type="hidden" name="merchantID" value="100001">
+    <input type="hidden" name="action" value="SALE">
+    <input type="hidden" name="type" value="1">
+    <input type="hidden" name="countryCode" value="826">
+    <input type="hidden" name="currencyCode" value="826">
+    <input type="hidden" id="amountMinor" name="amount" value="">
+    <input type="hidden" id="orderRefHidden" name="orderRef" value="">
+    <input type="hidden" name="redirectURL" value="https://yourdomain.com/paymentReturn.html">
 
     <p id="note">
       Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details to make payment.
@@ -190,21 +95,31 @@
   <script>
     const params = new URLSearchParams(window.location.search);
 
-    // Prefill existing fields
+    // Prefill visible fields
     document.getElementById('paymentAmount').value = params.get('paymentAmount') || '';
     document.getElementById('guestName').value = params.get('guestName') || '';
     document.getElementById('bookingRef').value = params.get('bookingRef') || '';
 
+    // Convert amount into minor units for Cardstream
+    if (params.has('paymentAmount')) {
+      const amountClean = params.get('paymentAmount').replace(/[^0-9.]/g, '');
+      const amountMinor = Math.round(parseFloat(amountClean) * 100);
+      document.getElementById('amountMinor').value = amountMinor;
+    }
+
+    // Pass YSB Booking Ref into hidden orderRef
+    if (params.has('bookingRef')) {
+      document.getElementById('orderRefHidden').value = params.get('bookingRef');
+    }
+
     // Conditional Source Ref field
     if (params.has('source')) {
       const bookingRefRow = document.getElementById('bookingRef').closest('.form-row');
-      const sourceName = params.get('source'); // e.g. Expedia, Airbnb, Booking.com
-
+      const sourceName = params.get('source');
       const sourceRow = document.createElement('div');
       sourceRow.className = 'form-row';
 
       const sourceLabel = document.createElement('label');
-      sourceLabel.setAttribute('for', 'sourceRef');
       sourceLabel.textContent = sourceName + ' Ref:';
 
       const sourceWrapper = document.createElement('div');
@@ -213,16 +128,13 @@
       const sourceInput = document.createElement('input');
       sourceInput.type = 'text';
       sourceInput.id = 'sourceRef';
-      sourceInput.name = 'sourceRef';
-      // Use sourceRef if present, otherwise show the source itself
-      sourceInput.value = params.get('sourceRef') || sourceName;
       sourceInput.readOnly = true;
+      sourceInput.value = params.get('sourceRef') || sourceName;
 
       sourceWrapper.appendChild(sourceInput);
       sourceRow.appendChild(sourceLabel);
       sourceRow.appendChild(sourceWrapper);
 
-      // Insert right after the YSB Booking Ref row
       bookingRefRow.insertAdjacentElement('afterend', sourceRow);
     }
   </script>
