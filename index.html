@@ -120,7 +120,7 @@
     document.getElementById('guestName').value = params.get('guestName') || '';
     document.getElementById('bookingRef').value = params.get('bookingRef') || '';
 
-    // Convert amount into minor units for Cardstream
+    // Convert amount into minor units
     if (params.has('paymentAmount')) {
       const amountClean = params.get('paymentAmount').replace(/[^0-9.]/g, '');
       const amountMinor = Math.round(parseFloat(amountClean) * 100);
@@ -129,12 +129,17 @@
       console.log("Amount (minor units):", amountMinor);
     }
 
-    // Pass YSB Booking Ref into hidden orderRef
+    // Set orderRef
     if (params.has('bookingRef')) {
       document.getElementById('orderRefHidden').value = params.get('bookingRef');
       document.getElementById('debugOrderRef').textContent = params.get('bookingRef');
       console.log("Order Ref:", params.get('bookingRef'));
     }
+
+    // Set merchantID and redirect URLs
+    document.getElementById('debugMID').textContent = "283320";
+    document.getElementById('debugRedirect').textContent = "https://www.yourstaybristol.co.uk/payment-success";
+    document.getElementById('debugCallback').textContent = "https://www.yourstaybristol.co.uk/payment-failed";
 
     // Conditional Source Ref field
     if (params.has('source')) {
@@ -149,14 +154,4 @@
       const sourceWrapper = document.createElement('div');
       sourceWrapper.className = 'input-wrapper';
 
-      const sourceInput = document.createElement('input');
-      sourceInput.type = 'text';
-      sourceInput.id = 'sourceRef';
-      sourceInput.readOnly = true;
-      sourceInput.value = params.get('sourceRef') || sourceName;
-
-      sourceWrapper.appendChild(sourceInput);
-      sourceRow.appendChild(sourceLabel);
-      sourceRow.appendChild(sourceWrapper);
-
-      bookingRefRow.insertAdjacent
+      const
