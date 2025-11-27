@@ -138,41 +138,43 @@
     <p>© Your Stay Bristol Ltd</p>
   </footer>
 
-  <script>
-    // Prefill fields from query string
-    const params = new URLSearchParams(window.location.search);
+<script>
+  // Prefill fields from query string
+  const params = new URLSearchParams(window.location.search);
 
-    const amount = params.get("paymentAmount") || "";
-    const guest = params.get("guestName") || "";
-    const booking = params.get("bookingRef") || "";
+  const amountField = document.getElementById("paymentAmount");
+  const guestField = document.getElementById("guestName");
+  const bookingField = document.getElementById("bookingRef");
+  const orderRefField = document.getElementById("orderRef");
 
-    document.getElementById("paymentAmount").value = amount;
-    document.getElementById("guestName").value = guest;
-    document.getElementById("bookingRef").value = booking;
+  if (params.has("paymentAmount")) amountField.value = params.get("paymentAmount");
+  if (params.has("guestName")) guestField.value = params.get("guestName");
+  if (params.has("bookingRef")) {
+    bookingField.value = params.get("bookingRef");
+    orderRefField.value = params.get("bookingRef") + "-YSB";
+  }
 
-    // Set orderRef based on bookingRef
-    if (booking) {
-      document.getElementById("orderRef").value = booking + "-YSB";
-    }
+  // Always mirror values into debug block
+  function updateDebug() {
+    document.getElementById("debug-amount").textContent = amountField.value;
+    document.getElementById("debug-guestName").textContent = guestField.value;
+    document.getElementById("debug-bookingRef").textContent = bookingField.value;
+    document.getElementById("debug-orderRef").textContent = orderRefField.value;
+  }
+  updateDebug();
 
-    // Debug block population
-    document.getElementById("debug-amount").textContent = amount;
-    document.getElementById("debug-guestName").textContent = guest;
-    document.getElementById("debug-bookingRef").textContent = booking;
-    document.getElementById("debug-orderRef").textContent = booking ? booking + "-YSB" : "";
+  // Console logging for test
+  console.log("Payment Amount:", amountField.value);
+  console.log("Guest Name:", guestField.value);
+  console.log("Booking Ref:", bookingField.value);
+  console.log("Order Ref:", orderRefField.value);
 
-    // Console logging for test
-    console.log("Payment Amount:", amount);
-    console.log("Guest Name:", guest);
-    console.log("Booking Ref:", booking);
-    console.log("Order Ref:", booking ? booking + "-YSB" : "");
-
-    // Spinner toggle on Proceed
-    document.getElementById("proceed-btn").addEventListener("click", function() {
-      document.getElementById("form-wrapper").style.display = "none";
-      document.getElementById("spinner-container").style.display = "block";
-      console.log("Proceed clicked. Spinner shown.");
-    });
-  </script>
-</body>
-</html>
+  // Spinner toggle on Proceed
+  document.getElementById("proceed-btn").addEventListener("click", function() {
+    // Hide only the form, keep debug visible
+    document.querySelector("form").style.display = "none";
+    document.getElementById("spinner-container").style.display = "block";
+    updateDebug(); // refresh debug values before handoff
+    console.log("Proceed clicked. Spinner shown.");
+  });
+</script>
