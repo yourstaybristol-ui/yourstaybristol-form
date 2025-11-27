@@ -1,177 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Stay Bristol: Make a Payment</title>
-  <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&family=Open+Sans&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Stay Bristol Payment</title>
   <style>
-    body { font-family: 'Open Sans', sans-serif; padding: 20px; background:#fff; color:#333; }
-    #logo { display:block; margin:0 auto 10px; width:220px; }
-    h2 { font-family:'Old Standard TT', serif; color:#2c3e50; font-size:24px; text-align:center; margin:0 0 10px; }
-    #intro,#note { text-align:center; font-size:14px; margin:20px auto; color:#555; max-width:600px; }
-    form { width:430px; margin:0 auto; }
-    .form-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
-    .form-row label { width:170px; font-size:14px; text-align:left; margin-right:10px; }
-    .input-wrapper { flex-grow:1; }
-    input { font-family:'Open Sans'; padding:6px; font-size:13px; font-weight:bold; width:100%; height:30px; }
-    input[readonly] { background:#f0f0f0; color:#555; }
-    #submit-container { display:flex; justify-content:center; margin-top:20px; }
-    button { padding:8px 16px; font-size:14px; background:#6a1b9a; color:#fff; border:none; cursor:pointer; }
-    button:hover { background:#4a148c; }
-    #loadingScreen { display:none; text-align:center; margin-top:40px; }
-    #loadingScreen p { font-size:16px; color:#333; }
-    #loadingScreen img { width:40px; height:40px; margin-top:10px; }
-    #debugBlock { margin-top:30px; font-size:13px; color:#444; background:#f9f9f9; padding:10px; border:1px solid #ccc; max-width:430px; margin-left:auto; margin-right:auto; }
-    footer { margin-top:40px; text-align:center; font-size:13px; color:#555; }
-    footer a { color:#6a1b9a; text-decoration:none; margin:0 8px; }
-    footer a:hover { text-decoration:underline; }
+    body {
+      font-family: "Open Sans", sans-serif;
+      background-color: #fff;
+      color: #444;
+      padding: 20px;
+      text-align: center;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #6a1b9a;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4a148c;
+    }
+
+    #spinner-container {
+      display: none;
+      margin-top: 40px;
+    }
+
+    img.spinner {
+      width: 100px;
+      height: 100px;
+      display: block;
+      margin: 20px auto;
+    }
+
+    @media (max-width: 600px) {
+      img.spinner {
+        width: 60px;
+        height: 60px;
+      }
+    }
   </style>
 </head>
 <body>
+  <form action="https://checkout.cardstream.com" method="POST">
+    <label for="amount">Payment Amount</label>
+    <input type="text" id="amount" name="amount" required>
 
-  <a href="https://www.yourstaybristol.co.uk/" target="_blank">
-    <img src="logo.png" alt="Your Stay Bristol Logo" id="logo" />
-  </a>
+    <label for="guestName">Guest Name</label>
+    <input type="text" id="guestName" name="guestName" required>
 
-  <h2>Your Stay Bristol: Make a Payment</h2>
+    <label for="bookingRef">Booking Reference</label>
+    <input type="text" id="bookingRef" name="bookingRef" required>
 
-  <p id="intro">
-    Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
-  </p>
+    <label for="expediaRef">Expedia Reference</label>
+    <input type="text" id="expediaRef" name="expediaRef">
 
-  <form action="https://gateway.cardstream.com/hosted/" method="post">
-    <div class="form-row">
-      <label for="paymentAmount">Payment Amount:</label>
-      <div class="input-wrapper">
-        <input type="text" id="paymentAmount" readonly />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="guestName">Guest Name:</label>
-      <div class="input-wrapper">
-        <input type="text" id="guestName" readonly />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label for="bookingRef">YSB Booking Ref:</label>
-      <div class="input-wrapper">
-        <input type="text" id="bookingRef" readonly />
-      </div>
-    </div>
-
-    <input type="hidden" name="merchantID" value="283320">
-    <input type="hidden" name="action" value="SALE">
-    <input type="hidden" name="type" value="1">
-    <input type="hidden" name="countryCode" value="826">
+    <!-- Hidden fields -->
+    <input type="hidden" name="merchantID" value="YOUR_MERCHANT_ID">
+    <input type="hidden" name="orderRef" id="orderRef">
     <input type="hidden" name="currencyCode" value="826">
-    <input type="hidden" id="amountMinor" name="amount" value="">
-    <input type="hidden" id="orderRefHidden" name="orderRef" value="">
-    <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success">
-    <input type="hidden" name="callbackURL" value="https://www.yourstaybristol.co.uk/payment-failed">
+    <input type="hidden" name="transactionType" value="SALE">
+    <input type="hidden" name="redirectURL" value="https://yourstaybristol.com/confirmation">
+    <input type="hidden" name="callbackURL" value="https://yourstaybristol.com/callback">
 
-    <p id="note">
-      Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details to make payment.
-      <strong>Please ensure you enter the card billing address</strong> as without a match the transaction will fail.
-    </p>
-
-    <div id="submit-container">
-      <button type="button" id="proceedButton">Proceed</button>
-    </div>
+    <button type="submit" id="proceed-btn">Proceed</button>
   </form>
 
-  <div id="loadingScreen">
-    <p>Redirecting to our secure payment partner, Cardstream… please wait.</p>
-    <img src="spinner.svg" alt="Loading...">
+  <!-- Spinner and redirect message -->
+  <div id="spinner-container">
+    <p style="font-size:18px;">Redirecting to our secure payment partner, Cardstream… please wait.</p>
+    <p style="font-size:16px;">Loading...</p>
+    <img src="spinner.svg" alt="Loading..." class="spinner">
   </div>
-
-  <div id="debugBlock">
-    <strong>Debug Info:</strong>
-    <p>Merchant ID: <span id="debugMID"></span></p>
-    <p>Amount (minor units): <span id="debugAmount"></span></p>
-    <p>Order Ref: <span id="debugOrderRef"></span></p>
-    <p>Redirect URL: <span id="debugRedirect"></span></p>
-    <p>Callback URL: <span id="debugCallback"></span></p>
-  </div>
-
-  <footer>
-    <hr style="margin-bottom:10px;">
-    <p>
-      <a href="https://www.yourstaybristol.co.uk/about-us" target="_blank">About Us</a> |
-      <a href="https://www.yourstaybristol.co.uk/locations" target="_blank">Locations</a> |
-      <a href="https://www.yourstaybristol.co.uk/terms-and-conditions" target="_blank">Terms & Conditions</a> |
-      <a href="https://www.yourstaybristol.co.uk/privacy-policy" target="_blank">Privacy Policy</a>
-    </p>
-    <p>© Your Stay Bristol Ltd</p>
-  </footer>
 
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script is running ✅");
-
-    function getParam(key) {
-      const url = window.location.href;
-      const regex = new RegExp('[?&]' + key + '=([^&#]*)', 'i');
-      const match = regex.exec(url);
-      return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : '';
-    }
-
-    document.getElementById('paymentAmount').value = getParam('paymentAmount');
-    document.getElementById('guestName').value = getParam('guestName');
-    document.getElementById('bookingRef').value = getParam('bookingRef');
-
-    const amountClean = getParam('paymentAmount').replace(/[^0-9.]/g, '');
-    const amountMinor = Math.round(parseFloat(amountClean) * 100);
-    document.getElementById('amountMinor').value = amountMinor;
-    document.getElementById('orderRefHidden').value = getParam('bookingRef');
-
-    document.getElementById('debugMID').textContent = "283320";
-    document.getElementById('debugAmount').textContent = amountMinor;
-    document.getElementById('debugOrderRef').textContent = getParam('bookingRef');
-    document.getElementById('debugRedirect').textContent = "https://www.yourstaybristol.co.uk/payment-success";
-    document.getElementById('debugCallback').textContent = "https://www.yourstaybristol.co.uk/payment-failed";
-
-    if (getParam('source')) {
-      const bookingRefRow = document.getElementById('bookingRef').closest('.form-row');
-      const sourceRow = document.createElement('div');
-      sourceRow.className = 'form-row';
-
-      const sourceLabel = document.createElement('label');
-      sourceLabel.textContent = getParam('source') + ' Ref:';
-
-      const sourceWrapper = document.createElement('div');
-      sourceWrapper.className = 'input-wrapper';
-
-      const sourceInput = document.createElement('input');
-      sourceInput.type = 'text';
-      sourceInput.readOnly = true;
-      sourceInput.value = getParam('sourceRef') || getParam('source');
-
-      sourceWrapper.appendChild(sourceInput);
-      sourceRow.appendChild(sourceLabel);
-      sourceRow.appendChild(sourceWrapper);
-
-      bookingRefRow.insertAdjacentElement('afterend', sourceRow);
-    }
-
-    document.getElementById('proceedButton').addEventListener('click', function () {
+    document.getElementById('proceed-btn').addEventListener('click', function() {
       document.querySelector('form').style.display = 'none';
-      document.getElementById('loadingScreen').style.display = 'block';
-      setTimeout(function () {
-        document.querySelector('form').submit();
-      }, 2000);
+      document.getElementById('spinner-container').style.display = 'block';
     });
 
-    console.log("Full URL:", window.location.href);
-    console.log("Parsed paymentAmount:", getParam('paymentAmount'));
-    console.log("Parsed guestName:", getParam('guestName'));
-    console.log("Parsed bookingRef:", getParam('bookingRef'));
-    console.log("Parsed source:", getParam('source'));
-    console.log("Parsed sourceRef:", getParam('sourceRef'));
-  });
-</script>
-
-     
+    // Optional: auto-generate orderRef from bookingRef
+    document.getElementById('bookingRef').addEventListener('input', function() {
+      document.getElementById('orderRef').value = this.value + "-YSB";
+    });
+  </script>
+</body>
+</html>
