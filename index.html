@@ -12,120 +12,29 @@
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    body {
-      font-family: 'Open Sans', sans-serif;
-      padding: 20px;
-      background-color: #ffffff;
-      color: #333;
-    }
-
-    #logo {
-      display: block;
-      margin: 0 auto 10px auto;
-      width: 220px;
-      height: auto;
-    }
-
-    h2 {
-      font-family: 'Old Standard TT', serif;
-      color: #2c3e50;
-      font-size: 24px;
-      text-align: center;
-      margin: 0 0 10px 0;
-    }
-
-    #intro, #note {
-      text-align: center;
-      font-size: 14px;
-      margin: 20px auto;
-      color: #555;
-      max-width: 600px;
-    }
-
-    form {
-      width: 430px;
-      margin: 0 auto;
-    }
-
-    .form-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 6px;
-      width: 100%;
-    }
-
-    .form-row label {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 14px;
-      font-weight: normal;
-      width: 170px;
-      text-align: left;
-      margin-right: 10px;
-      white-space: nowrap;
-    }
-
-    .input-wrapper {
-      flex-grow: 1;
-      width: auto;
-    }
-
-    input {
-      font-family: 'Open Sans', sans-serif;
-      padding: 6px;
-      font-size: 13px;
-      font-weight: bold;
-      box-sizing: border-box;
-      width: 100%;
-      height: 30px;
-    }
-
-    input[readonly] {
-      background-color: #f0f0f0;
-      color: #555;
-      font-weight: bold;
-    }
-
-    #submit-container {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    button {
-      font-family: 'Open Sans', sans-serif;
-      padding: 8px 16px;
-      font-size: 14px;
-      background-color: #6a1b9a;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #4a148c;
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 13px;
-      color: #555;
-    }
-
-    footer a {
-      color: #6a1b9a;
-      text-decoration: none;
-      margin: 0 8px;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
+    body { font-family:'Open Sans',sans-serif; padding:20px; background:#fff; color:#333; }
+    #logo { display:block; margin:0 auto 10px auto; width:220px; }
+    h2 { font-family:'Old Standard TT',serif; color:#2c3e50; font-size:24px; text-align:center; margin:0 0 10px 0; }
+    #intro,#note { text-align:center; font-size:14px; margin:20px auto; color:#555; max-width:600px; }
+    form { width:430px; margin:0 auto; }
+    .form-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+    .form-row label { font-size:14px; width:170px; text-align:left; margin-right:10px; }
+    .input-wrapper { flex-grow:1; }
+    input { padding:6px; font-size:13px; font-weight:bold; box-sizing:border-box; width:100%; height:30px; }
+    input[readonly] { background:#f0f0f0; color:#555; }
+    #submit-container { display:flex; justify-content:center; margin-top:20px; }
+    button { padding:8px 16px; font-size:14px; background:#6a1b9a; color:#fff; border:none; cursor:pointer; }
+    button:hover { background:#4a148c; }
+    #spinner-container { display:none; text-align:center; margin-top:40px; }
+    .spinner { width:100px; height:100px; margin:20px auto; display:block; }
+    @media(max-width:600px){ .spinner{width:60px;height:60px;} }
+    #debug { margin-top:30px; font-size:13px; background:#f9f9f9; border:1px solid #ccc; padding:10px; border-radius:4px; }
+    footer { margin-top:40px; text-align:center; font-size:13px; color:#555; }
+    footer a { color:#6a1b9a; text-decoration:none; margin:0 8px; }
+    footer a:hover { text-decoration:underline; }
   </style>
 </head>
+
 <body>
 
   <a href="https://www.yourstaybristol.co.uk/" target="_blank">
@@ -133,47 +42,90 @@
   </a>
 
   <h2>Your Stay Bristol: Make a Payment</h2>
-
   <p id="intro">
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <form>
-    <!-- Payment Amount first -->
-    <div class="form-row">
-      <label for="paymentAmount">Payment Amount:</label>
-      <div class="input-wrapper">
-        <input type="text" id="paymentAmount" readonly maxlength="25" />
+  <div id="form-wrapper">
+    <form action="https://checkout.cardstream.com" method="POST">
+      <!-- Payment Amount -->
+      <div class="form-row">
+        <label for="paymentAmount">Payment Amount:</label>
+        <div class="input-wrapper">
+          <input type="text" id="paymentAmount" name="amount" readonly />
+        </div>
       </div>
-    </div>
 
-    <!-- Guest Name second -->
-    <div class="form-row">
-      <label for="guestName">Guest Name:</label>
-      <div class="input-wrapper">
-        <input type="text" id="guestName" readonly maxlength="25" />
+      <!-- Guest Name -->
+      <div class="form-row">
+        <label for="guestName">Guest Name:</label>
+        <div class="input-wrapper">
+          <input type="text" id="guestName" name="guestName" readonly />
+        </div>
       </div>
-    </div>
 
-    <!-- YSB Booking Ref third -->
-    <div class="form-row">
-      <label for="bookingRef">YSB Booking Ref:</label>
-      <div class="input-wrapper">
-        <input type="text" id="bookingRef" readonly maxlength="25" />
+      <!-- YSB Booking Ref -->
+      <div class="form-row">
+        <label for="bookingRef">YSB Booking Ref:</label>
+        <div class="input-wrapper">
+          <input type="text" id="bookingRef" name="bookingRef" readonly />
+        </div>
       </div>
+
+      <!-- Hidden Cardstream fields -->
+      <input type="hidden" name="merchantID" value="YOUR_MERCHANT_ID">
+      <input type="hidden" name="orderRef" id="orderRef">
+      <input type="hidden" name="currencyCode" value="826">
+      <input type="hidden" name="transactionType" value="SALE">
+      <input type="hidden" name="redirectURL" value="https://yourstaybristol.com/confirmation">
+      <input type="hidden" name="callbackURL" value="https://yourstaybristol.com/callback">
+
+      <p id="note">
+        Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
+        <strong>Please ensure you enter the card billing address</strong> as without a match the transaction will fail.
+      </p>
+
+      <div id="submit-container">
+        <button type="submit" id="proceed-btn">Proceed</button>
+      </div>
+    </form>
+
+    <!-- Debug block -->
+    <div id="debug">
+      <strong>Debug Info:</strong><br>
+      Amount: <span id="debug-amount"></span><br>
+      Guest Name: <span id="debug-guestName"></span><br>
+      Booking Ref: <span id="debug-bookingRef"></span><br>
+      Order Ref: <span id="debug-orderRef"></span>
     </div>
+  </div>
 
-    <!-- Conditional fields will be injected here -->
-
-    <p id="note">
-      Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
-      <strong>Please ensure you enter the card billing address</strong> as without a match the transaction will fail.
-    </p>
-
-    <div id="submit-container">
-      <button type="submit">Proceed</button>
-    </div>
-  </form>
+  <!-- Spinner + redirect message -->
+  <div id="spinner-container">
+    <p style="font-size:16px;">Redirecting to our secure payment partner, Cardstream… please wait.</p>
+    <p style="font-size:14px;">Loading...</p>
+    <svg class="spinner" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(50,50)">
+        <g>
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.2s" repeatCount="indefinite"/>
+          <g fill="#6a1b9a">
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" opacity="1"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(30)" opacity="0.9"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(60)" opacity="0.8"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(90)" opacity="0.7"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(120)" opacity="0.6"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(150)" opacity="0.5"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(180)" opacity="0.4"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(210)" opacity="0.3"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(240)" opacity="0.2"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(270)" opacity="0.1"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(300)" opacity="0.05"/>
+            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(330)" opacity="0.02"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
 
   <footer>
     <hr style="margin-bottom:10px;">
@@ -187,43 +139,40 @@
   </footer>
 
   <script>
+    // Prefill fields from query string
     const params = new URLSearchParams(window.location.search);
 
-    // Prefill existing fields
-    document.getElementById('paymentAmount').value = params.get('paymentAmount') || '';
-    document.getElementById('guestName').value = params.get('guestName') || '';
-    document.getElementById('bookingRef').value = params.get('bookingRef') || '';
+    const amount = params.get("paymentAmount") || "";
+    const guest = params.get("guestName") || "";
+    const booking = params.get("bookingRef") || "";
 
-    // Conditional Source Ref field
-    if (params.has('source')) {
-      const bookingRefRow = document.getElementById('bookingRef').closest('.form-row');
-      const sourceName = params.get('source'); // e.g. Expedia, Airbnb, Booking.com
+    document.getElementById("paymentAmount").value = amount;
+    document.getElementById("guestName").value = guest;
+    document.getElementById("bookingRef").value = booking;
 
-      const sourceRow = document.createElement('div');
-      sourceRow.className = 'form-row';
-
-      const sourceLabel = document.createElement('label');
-      sourceLabel.setAttribute('for', 'sourceRef');
-      sourceLabel.textContent = sourceName + ' Ref:';
-
-      const sourceWrapper = document.createElement('div');
-      sourceWrapper.className = 'input-wrapper';
-
-      const sourceInput = document.createElement('input');
-      sourceInput.type = 'text';
-      sourceInput.id = 'sourceRef';
-      // Use sourceRef if present, otherwise show the source itself
-      sourceInput.value = params.get('sourceRef') || sourceName;
-      sourceInput.readOnly = true;
-
-      sourceWrapper.appendChild(sourceInput);
-      sourceRow.appendChild(sourceLabel);
-      sourceRow.appendChild(sourceWrapper);
-
-      // Insert right after the YSB Booking Ref row
-      bookingRefRow.insertAdjacentElement('afterend', sourceRow);
+    // Set orderRef based on bookingRef
+    if (booking) {
+      document.getElementById("orderRef").value = booking + "-YSB";
     }
-  </script>
 
+    // Debug block population
+    document.getElementById("debug-amount").textContent = amount;
+    document.getElementById("debug-guestName").textContent = guest;
+    document.getElementById("debug-bookingRef").textContent = booking;
+    document.getElementById("debug-orderRef").textContent = booking ? booking + "-YSB" : "";
+
+    // Console logging for test
+    console.log("Payment Amount:", amount);
+    console.log("Guest Name:", guest);
+    console.log("Booking Ref:", booking);
+    console.log("Order Ref:", booking ? booking + "-YSB" : "");
+
+    // Spinner toggle on Proceed
+    document.getElementById("proceed-btn").addEventListener("click", function() {
+      document.getElementById("form-wrapper").style.display = "none";
+      document.getElementById("spinner-container").style.display = "block";
+      console.log("Proceed clicked. Spinner shown.");
+    });
+  </script>
 </body>
 </html>
