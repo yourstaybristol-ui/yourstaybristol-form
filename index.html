@@ -12,127 +12,212 @@
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    body { font-family:'Open Sans',sans-serif; padding:20px; background:#fff; color:#333; }
-    #logo { display:block; margin:0 auto 10px auto; width:220px; }
-    h2 { font-family:'Old Standard TT',serif; color:#2c3e50; font-size:24px; text-align:center; margin:0 0 10px 0; }
-    #intro,#note { text-align:center; font-size:14px; margin:20px auto; color:#555; max-width:600px; }
-    form { width:430px; margin:0 auto; }
-    .form-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
-    .form-row label { font-size:14px; width:170px; text-align:left; margin-right:10px; }
-    .input-wrapper { flex-grow:1; }
-    input { padding:6px; font-size:13px; font-weight:bold; box-sizing:border-box; width:100%; height:30px; }
-    input[readonly] { background:#f0f0f0; color:#555; }
-    #submit-container { display:flex; justify-content:center; margin-top:20px; }
-    button { padding:8px 16px; font-size:14px; background:#6a1b9a; color:#fff; border:none; cursor:pointer; }
-    button:hover { background:#4a148c; }
-    #spinner-container { display:none; text-align:center; margin-top:40px; }
-    .spinner { width:100px; height:100px; margin:20px auto; display:block; }
-    @media(max-width:600px){ .spinner{width:60px;height:60px;} }
-    #debug { margin-top:30px; font-size:13px; background:#f9f9f9; border:1px solid #ccc; padding:10px; border-radius:4px; }
-    footer { margin-top:40px; text-align:center; font-size:13px; color:#555; }
-    footer a { color:#6a1b9a; text-decoration:none; margin:0 8px; }
-    footer a:hover { text-decoration:underline; }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      padding: 20px;
+      background-color: #ffffff;
+      color: #333;
+    }
+    #logo {
+      display: block;
+      margin: 0 auto 10px auto;
+      width: 220px;
+      height: auto;
+    }
+    h2 {
+      font-family: 'Old Standard TT', serif;
+      color: #2c3e50;
+      font-size: 24px;
+      text-align: center;
+      margin: 0 0 10px 0;
+    }
+    #intro, #note {
+      text-align: center;
+      font-size: 14px;
+      margin: 20px auto;
+      color: #555;
+      max-width: 600px;
+    }
+    form {
+      width: 430px;
+      margin: 0 auto;
+    }
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+    .form-row label {
+      font-size: 14px;
+      width: 170px;
+      text-align: left;
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+    .input-wrapper { flex-grow: 1; }
+    input {
+      padding: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      box-sizing: border-box;
+      width: 100%;
+      height: 30px;
+    }
+    input[readonly] {
+      background-color: #f0f0f0;
+      color: #555;
+    }
+    #submit-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #6a1b9a;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { background-color: #4a148c; }
+    #debug {
+      font-size: 13px;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    #debug span { display: block; margin-bottom: 6px; }
+    #spinner-container { display: none; text-align: center; margin-top: 20px; }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+    }
+    footer a { color: #6a1b9a; text-decoration: none; margin: 0 8px; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 
 <body>
-
   <a href="https://www.yourstaybristol.co.uk/" target="_blank">
     <img src="logo.png" alt="Your Stay Bristol Logo" id="logo" />
   </a>
 
   <h2>Your Stay Bristol: Make a Payment</h2>
+
   <p id="intro">
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <div id="form-wrapper">
-    <form action="https://gateway.cardstream.com/hosted/" method="POST">	
-
-      <!-- Payment Amount (visible, formatted) -->
-      <div class="form-row">
-        <label for="paymentAmount">Payment Amount:</label>
-        <div class="input-wrapper">
-          <input type="text" id="paymentAmount" readonly />
-        </div>
+  <form>
+    <!-- Payment Amount -->
+    <div class="form-row">
+      <label for="paymentAmount">Payment Amount:</label>
+      <div class="input-wrapper">
+        <input type="text" id="paymentAmount" readonly maxlength="25" />
       </div>
+    </div>
 
-      <!-- Guest Name -->
-      <div class="form-row">
-        <label for="guestName">Guest Name:</label>
-        <div class="input-wrapper">
-          <input type="text" id="guestName" readonly />
-        </div>
+    <!-- Guest Name -->
+    <div class="form-row">
+      <label for="guestName">Guest Name:</label>
+      <div class="input-wrapper">
+        <input type="text" id="guestName" readonly maxlength="25" />
       </div>
+    </div>
 
-      <!-- YSB Booking Ref -->
-      <div class="form-row">
-        <label for="bookingRef">YSB Booking Ref:</label>
-        <div class="input-wrapper">
-          <input type="text" id="bookingRef" readonly />
-        </div>
+    <!-- Booking Ref -->
+    <div class="form-row">
+      <label for="bookingRef">YSB Booking Ref:</label>
+      <div class="input-wrapper">
+        <input type="text" id="bookingRef" readonly maxlength="25" />
       </div>
+    </div>
 
-      <!-- Hidden Cardstream fields -->
-      <input type="hidden" id="amountHidden" name="amount" value="">
-      <input type="hidden" name="merchantID" value="283320">
-      <input type="hidden" name="action" value="SALE">
-      <input type="hidden" name="type" value="1">
-      <input type="hidden" name="countryCode" value="826">
-      <input type="hidden" name="currencyCode" value="826">
-      <input type="hidden" id="orderRef" name="orderRef" value="">
-      <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success">
-      <input type="hidden" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed">
+    <!-- Conditional fields injected here -->
 
-      <p id="note">
-        Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
-        <strong>Please ensure you enter the card billing address</strong> as without a match the transaction will fail.
-      </p>
+  // Conditional Source / SourceRef field injection
+  const source = params.get("source");
+  const sourceRef = params.get("sourceRef");
 
-      <div id="submit-container">
-        <button type="submit" id="proceed-btn">Proceed</button>
-      </div>
-    </form>
+  if (source || sourceRef) {
+    const bookingRefRow = document.getElementById("bookingRef").closest(".form-row");
+
+    const sourceRow = document.createElement("div");
+    sourceRow.className = "form-row";
+
+    const sourceLabel = document.createElement("label");
+    sourceLabel.setAttribute("for", "sourceField");
+    sourceLabel.textContent = source + " Ref:";
+
+    const sourceWrapper = document.createElement("div");
+    sourceWrapper.className = "input-wrapper";
+
+    const sourceInput = document.createElement("input");
+    sourceInput.type = "text";
+    sourceInput.id = "sourceField";
+    sourceInput.readOnly = true;
+    sourceInput.value = sourceRef || source;
+
+    sourceWrapper.appendChild(sourceInput);
+    sourceRow.appendChild(sourceLabel);
+    sourceRow.appendChild(sourceWrapper);
+
+    // Insert right after the Booking Ref row
+    bookingRefRow.insertAdjacentElement("afterend", sourceRow);
+  }
+
+    <!-- Hidden Cardstream fields -->
+    <input type="hidden" name="merchantID" value="283320" />
+    <input type="hidden" name="action" value="SALE" />
+    <input type="hidden" name="type" value="1" />
+    <input type="hidden" name="countryCode" value="826" />
+    <input type="hidden" name="currencyCode" value="826" />
+    <input type="hidden" id="amountHidden" name="amount" value="" />
+    <input type="hidden" id="orderRef" name="orderRef" value="" />
+    <input type="hidden" id="transactionUnique" name="transactionUnique" value="" />
+    <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success" />
+    <input type="hidden" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed" />
 
     <!-- Debug block -->
     <div id="debug">
-  	<strong>Debug Info (Cardstream Payload):</strong><br>
-  	<span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span>
-  	<span><strong>Action:</strong> <span id="debug-action"></span></span>
-  	<span><strong>Type:</strong> <span id="debug-type"></span></span>
-  	<span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span>
-  	<span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span>
-  	<span><strong>Amount:</strong> <span id="debug-amount"></span></span>
-  	<span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span>
-  	<span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span>
-  	<span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span>
-  	<span><strong>Cancel URL:</strong> <span id="debug-cancelURL"></span></span>
+      <strong>Debug Info (Cardstream Payload):</strong><br>
+      <span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span>
+      <span><strong>Action:</strong> <span id="debug-action"></span></span>
+      <span><strong>Type:</strong> <span id="debug-type"></span></span>
+      <span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span>
+      <span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span>
+      <span><strong>Amount:</strong> <span id="debug-amount"></span></span>
+      <span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span>
+      <span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span>
+      <span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span>
+      <span><strong>Cancel URL:</strong> <span id="debug-cancelURL"></span></span>
     </div>
 
-  <!-- Spinner + redirect message -->
+    <p id="note">
+      Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
+      <strong>Please ensure you enter the card billing address</strong> as without a match the transaction will fail.
+    </p>
+
+    <div id="submit-container">
+      <button type="submit" id="proceed-btn">Proceed</button>
+    </div>
+  </form>
+
+  <!-- Spinner -->
   <div id="spinner-container">
-    <p style="font-size:16px;">Redirecting to our secure payment partner, Cardstream… please wait.</p>
-    <p style="font-size:14px;">Loading...</p>
-    <svg class="spinner" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(50,50)">
-        <g>
-          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2.2s" repeatCount="indefinite"/>
-          <g fill="#6a1b9a">
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" opacity="1"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(30)" opacity="0.9"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(60)" opacity="0.8"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(90)" opacity="0.7"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(120)" opacity="0.6"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(150)" opacity="0.5"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(180)" opacity="0.4"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(210)" opacity="0.3"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(240)" opacity="0.2"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(270)" opacity="0.1"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(300)" opacity="0.05"/>
-            <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(330)" opacity="0.02"/>
-          </g>
-        </g>
-      </g>
+    <p>Processing your payment…</p>
+    <svg width="50" height="50" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" stroke="#333" stroke-width="8" fill="none" stroke-dasharray="200" stroke-dashoffset="0">
+        <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
     </svg>
   </div>
 
@@ -145,10 +230,9 @@
       <a href="https://www.yourstaybristol.co.uk/privacy-policy" target="_blank">Privacy Policy</a>
     </p>
     <p>© Your Stay Bristol Ltd</p>
-  </footer>  
+  </footer>
 
-<script>
-  // Parse query string
+  <script>
   const params = new URLSearchParams(window.location.search);
 
   // Field references
@@ -167,25 +251,25 @@
 
   // Prefill fields from query string
   if (params.has("paymentAmount")) {
-    const rawAmount = params.get("paymentAmount"); // e.g. "77250.99" (pounds)
-    amountField.value = formatCurrency(rawAmount); // display £77,250.99
-    const penceValue = Math.round(parseFloat(rawAmount) * 100);   // convert to pence
-    amountHidden.value = penceValue;                              // send raw pence
+    const rawAmount = params.get("paymentAmount");
+    amountField.value = formatCurrency(rawAmount);
+    const penceValue = Math.round(parseFloat(rawAmount) * 100);
+    amountHidden.value = penceValue;
   }
 
   if (params.has("guestName")) {
-    guestField.value = params.get("guestName"); // display only, not sent
+    guestField.value = params.get("guestName");
   }
 
   if (params.has("bookingRef")) {
-    bookingField.value = params.get("bookingRef"); // display only
-    orderRefField.value = params.get("bookingRef"); // send as orderRef
+    bookingField.value = params.get("bookingRef");
+    orderRefField.value = params.get("bookingRef");
   }
 
   // Generate transactionUnique
   transactionUniqueField.value = Date.now().toString();
 
-  // Conditional source field injection (display only)
+  // Conditional source field injection
   const source = params.get("source");
   const sourceRef = params.get("sourceRef");
 
@@ -233,12 +317,12 @@
   updateDebug();
 
   // Spinner toggle and debug refresh on Proceed
-  document.getElementById("proceed-btn").addEventListener("click", function() {
+  document.getElementById("proceed-btn").addEventListener("click", function(e) {
+    e.preventDefault(); // prevent default form submission
     document.querySelector("form").style.display = "none";
     document.getElementById("spinner-container").style.display = "block";
     updateDebug(); // refresh debug before submission
     console.log("Proceed clicked. Spinner shown.");
   });
 </script>
-</body>
-</html>
+
