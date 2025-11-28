@@ -96,19 +96,18 @@
 
     <!-- Debug block -->
     <div id="debug">
-  	<strong>Debug Info:</strong><br>
-  	Amount: <span id="debug-amount"></span><br>
-  	Guest Name: <span id="debug-guestName"></span><br>
-  	Booking Ref: <span id="debug-bookingRef"></span><br>
-  	Order Ref: <span id="debug-orderRef"></span><br>
+  	<strong>Debug Info (Cardstream Payload):</strong><br>
   	Merchant ID: <span id="debug-merchantID"></span><br>
   	Action: <span id="debug-action"></span><br>
   	Type: <span id="debug-type"></span><br>
   	Country Code: <span id="debug-countryCode"></span><br>
   	Currency Code: <span id="debug-currencyCode"></span><br>
+  	Amount: <span id="debug-amount"></span><br>
+  	Order Ref: <span id="debug-orderRef"></span><br>
+  	Transaction Unique: <span id="debug-transactionUnique"></span><br>
   	Redirect URL: <span id="debug-redirectURL"></span><br>
   	Cancel URL: <span id="debug-cancelURL"></span>
-   </div>
+    </div>
 
   <!-- Spinner + redirect message -->
   <div id="spinner-container">
@@ -147,7 +146,6 @@
     </p>
     <p>© Your Stay Bristol Ltd</p>
   </footer>  
-
 
 <script>
   // Parse query string
@@ -230,17 +228,9 @@
     document.getElementById("debug-redirectURL").textContent = document.querySelector('input[name="redirectURL"]').value;
     document.getElementById("debug-cancelURL").textContent = document.querySelector('input[name="cancelURL"]').value;
   }
-  updateDebug();
 
-  // Console logging
-  console.log("Payment Amount (display):", amountField.value);
-  console.log("Payment Amount (raw pence):", amountHidden.value);
-  console.log("Guest Name (display only):", guestField.value);
-  console.log("Booking Ref:", bookingField.value);
-  console.log("Order Ref:", orderRefField.value);
-  console.log("Transaction Unique:", transactionUniqueField.value);
-  console.log("Source:", source);
-  console.log("Source Ref:", sourceRef);
+  // Call after all values are set
+  updateDebug();
 
   // Spinner toggle
   document.getElementById("proceed-btn").addEventListener("click", function() {
