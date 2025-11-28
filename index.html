@@ -97,15 +97,15 @@
     <!-- Debug block -->
     <div id="debug">
   	<strong>Debug Info (Cardstream Payload):</strong><br>
-  	<span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span><br>
-  	<span><strong>Action:</strong> <span id="debug-action"></span></span><br>
-  	<span><strong>Type:</strong> <span id="debug-type"></span></span><br>
-  	<span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span><br>
-  	<span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span><br>
-  	<span><strong>Amount:</strong> <span id="debug-amount"></span></span><br>
-  	<span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span><br>
-  	<span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span><br>
-  	<span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span><br>
+  	<span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span>
+  	<span><strong>Action:</strong> <span id="debug-action"></span></span>
+  	<span><strong>Type:</strong> <span id="debug-type"></span></span>
+  	<span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span>
+  	<span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span>
+  	<span><strong>Amount:</strong> <span id="debug-amount"></span></span>
+  	<span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span>
+  	<span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span>
+  	<span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span>
   	<span><strong>Cancel URL:</strong> <span id="debug-cancelURL"></span></span>
     </div>
 
@@ -232,11 +232,11 @@
   // Call after all values are set
   updateDebug();
 
-  // Spinner toggle
+  // Spinner toggle and debug refresh on Proceed
   document.getElementById("proceed-btn").addEventListener("click", function() {
     document.querySelector("form").style.display = "none";
     document.getElementById("spinner-container").style.display = "block";
-    updateDebug();
+    updateDebug(); // refresh debug before submission
     console.log("Proceed clicked. Spinner shown.");
   });
 </script>
