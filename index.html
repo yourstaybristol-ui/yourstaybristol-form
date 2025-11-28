@@ -202,7 +202,28 @@
     <p>© Your Stay Bristol Ltd</p>
   </footer>
 
-  <script>
+<script>
+function formatCurrency(poundsStr) {
+  const pounds = parseFloat(poundsStr).toFixed(2);
+  return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function updateDebug() {
+  const fields = [
+    "merchantID","action","type","countryCode","currencyCode",
+    "amount","orderRef","transactionUnique","redirectURL","cancelURL"
+  ];
+  fields.forEach(field => {
+    const input = document.querySelector(`[name="${field}"]`);
+    const debugSpan = document.getElementById("debug-" + field);
+    if (input && debugSpan) {
+      debugSpan.textContent = input.value || "(empty)";
+      debugSpan.style.color = ""; // reset any red styling
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
   const params = new URLSearchParams(window.location.search);
 
   // Field references
@@ -213,12 +234,6 @@
   const orderRefField = document.getElementById("orderRef");
   const transactionUniqueField = document.getElementById("transactionUnique");
 
-  // Format currency for display
-  function formatCurrency(poundsStr) {
-    const pounds = parseFloat(poundsStr).toFixed(2);
-    return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
   // Prefill fields from query string
   if (params.has("paymentAmount")) {
     const rawAmount = params.get("paymentAmount");
@@ -226,159 +241,54 @@
     const penceValue = Math.round(parseFloat(rawAmount) * 100);
     amountHidden.value = penceValue;
   }
-
-  if (params.has("guestName")) {
-    guestField.value = params.get("guestName");
-  }
-
+  if (params.has("guestName")) guestField.value = params.get("guestName");
   if (params.has("bookingRef")) {
     bookingField.value = params.get("bookingRef");
     orderRefField.value = params.get("bookingRef");
   }
+  // Generate transactionUnique if not supplied
+  transactionUniqueField.value = params.get("transactionUnique") || Date.now().toString();
 
-  // Generate transactionUnique
-  transactionUniqueField.value = Date.now().toString();
-
-  // Conditional source field injection
+  // Conditional source/sourceRef injection
   const source = params.get("source");
   const sourceRef = params.get("sourceRef");
-
   if (source || sourceRef) {
-    const bookingRefRow = document.getElementById("bookingRef").closest(".form-row");
-
+    const bookingRefRow = bookingField.closest(".form-row");
     const sourceRow = document.createElement("div");
     sourceRow.className = "form-row";
-
-    const sourceLabel = document.createElement("label");
-    sourceLabel.setAttribute("for", "sourceField");
-    sourceLabel.textContent = source + " Ref:";
-
-    const sourceWrapper = document.createElement("div");
-    sourceWrapper.className = "input-wrapper";
-
-    const sourceInput = document.createElement("input");
-    sourceInput.type = "text";
-    sourceInput.id = "sourceField";
-    sourceInput.readOnly = true;
-    sourceInput.value = sourceRef || source;
-
-    sourceWrapper.appendChild(sourceInput);
-    sourceRow.appendChild(sourceLabel);
-    sourceRow.appendChild(sourceWrapper);
-
+    sourceRow.innerHTML = `
+      <label for="sourceField">${source} Ref:</label>
+      <div class="input-wrapper">
+        <input type="text" id="sourceField" readonly maxlength="25" value="${sourceRef || source}" />
+      </div>`;
     bookingRefRow.insertAdjacentElement("afterend", sourceRow);
   }
 
-  // Update debug block
-
-  function updateDebug() {
-  const fields = [
-    "merchantID",
-    "action",
-    "type",
-    "countryCode",
-    "currencyCode",
-    "amount",
-    "orderRef",
-    "transactionUnique",
-    "redirectURL",
-    "cancelURL"
-  ];
-
-  fields.forEach(field => {
-    const input = document.querySelector(`[name="${field}"]`);
-    const debugSpan = document.getElementById("debug-" + field);
-    if (input && debugSpan) {
-      debugSpan.textContent = input.value || "(empty)";
-      debugSpan.style.color = ""; // reset color in case it was red
-    }
-  });
-}
-
-function populateFieldsFromURL() {
-  const params = new URLSearchParams(window.location.search);
-
-  // Visible fields
-  const paymentAmount = params.get("amount"); // in pence
-  const guestName = params.get("guestName");
-  const bookingRef = params.get("orderRef");
-  const expelRef = params.get("expelRef"); // optional
-
-  // Hidden fields
-  const transactionUnique = params.get("transactionUnique") || Date.now().toString();
-
-  // Populate visible fields
-  if (paymentAmount) {
-    const pounds = (parseInt(paymentAmount, 10) / 100).toFixed(2);
-    document.getElementById("paymentAmount").value = "£" + pounds;
-  }
-  if (guestName) document.getElementById("guestName").value = guestName;
-  if (bookingRef) document.getElementById("bookingRef").value = bookingRef;
-
-  // Optional field injection
-  if (expelRef) {
-    const container = document.createElement("div");
-    container.className = "form-row";
-    container.innerHTML = `
-      <label for="expelRef">Expel Ref:</label>
-      <div class="input-wrapper">
-        <input type="text" id="expelRef" readonly maxlength="25" value="${expelRef}" />
-      </div>
-    `;
-    const submitContainer = document.getElementById("submit-container");
-    if (submitContainer) {
-      document.getElementById("payment-form").insertBefore(container, submitContainer);
-    }
-  }
-
-  // Populate hidden fields
-  if (paymentAmount) document.querySelector('[name="amount"]').value = paymentAmount;
-  if (bookingRef) document.querySelector('[name="orderRef"]').value = bookingRef;
-  document.querySelector('[name="transactionUnique"]').value = transactionUnique;
-}
-
-  // Call after all values are set
-  
-document.addEventListener("DOMContentLoaded", function() {
-  populateFieldsFromURL(); // ✅ Extract and mirror values from URL
-
+  // Proceed button handler
   const proceedBtn = document.getElementById("proceed-btn");
   const paymentForm = document.getElementById("payment-form");
   const spinner = document.getElementById("spinner-container");
-
-  // ... rest of your code ...
-});
 
   if (proceedBtn && paymentForm) {
     proceedBtn.addEventListener("click", function(e) {
       e.preventDefault();
 
-      // Hide form, show spinner
       paymentForm.style.display = "none";
       if (spinner) spinner.style.display = "block";
 
-      // Update debug block
       try {
-  	// Populate hidden fields
-  	document.querySelector('[name="amount"]').value = "17411";
-  	document.querySelector('[name="orderRef"]').value = "75225";
-  	document.querySelector('[name="transactionUnique"]').value = Date.now().toString();
+        updateDebug();
+      } catch (err) {
+        console.error("updateDebug failed:", err);
+      }
 
-     updateDebug();
-   } catch (err) {
-     console.error("updateDebug failed:", err);
-   }
-
-      // 🔍 Validate required hidden fields before submission
+      // Validate required hidden fields
       const requiredFields = ["amount", "orderRef", "transactionUnique"];
       let missing = [];
-
       requiredFields.forEach(field => {
         const el = paymentForm.querySelector(`[name="${field}"]`);
         if (!el || !el.value) {
           missing.push(field);
-
-          // Highlight missing field in debug block if span exists
           const debugSpan = document.getElementById("debug-" + field);
           if (debugSpan) {
             debugSpan.style.color = "red";
@@ -390,13 +300,12 @@ document.addEventListener("DOMContentLoaded", function() {
       if (missing.length > 0) {
         console.error("Missing required fields:", missing.join(", "));
         alert("Cannot proceed: missing " + missing.join(", "));
-        // Restore form visibility so user can fix
         paymentForm.style.display = "block";
         if (spinner) spinner.style.display = "none";
-        return; // stop here, do not submit
+        return;
       }
 
-      // 🔍 Log payload before submission
+      // Log payload before submission
       const formData = new FormData(paymentForm);
       console.group("Cardstream Payload");
       for (let [key, value] of formData.entries()) {
