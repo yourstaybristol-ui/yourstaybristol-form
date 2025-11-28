@@ -159,6 +159,7 @@
   const guestField = document.getElementById("guestName");
   const bookingField = document.getElementById("bookingRef");
   const orderRefField = document.getElementById("orderRef");
+  const transactionUniqueField = document.getElementById("transactionUnique");
 
   // Format currency for display
   function formatCurrency(poundsStr) {
@@ -175,15 +176,18 @@
   }
 
   if (params.has("guestName")) {
-    guestField.value = params.get("guestName");
+    guestField.value = params.get("guestName"); // display only, not sent
   }
 
   if (params.has("bookingRef")) {
-    bookingField.value = params.get("bookingRef");
-    orderRefField.value = params.get("bookingRef");
+    bookingField.value = params.get("bookingRef"); // display only
+    orderRefField.value = params.get("bookingRef"); // send as orderRef
   }
 
-  // Conditional source field injection
+  // Generate transactionUnique
+  transactionUniqueField.value = Date.now().toString();
+
+  // Conditional source field injection (display only)
   const source = params.get("source");
   const sourceRef = params.get("sourceRef");
 
@@ -215,28 +219,26 @@
 
   // Update debug block
   function updateDebug() {
-  document.getElementById("debug-amount").textContent = amountField.value + " (" + amountHidden.value + " pence)";
-  document.getElementById("debug-guestName").textContent = guestField.value;
-  document.getElementById("debug-bookingRef").textContent = bookingField.value;
-  document.getElementById("debug-orderRef").textContent = orderRefField.value;
-
-  // Hidden fields
-  document.getElementById("debug-merchantID").textContent = document.querySelector('input[name="merchantID"]').value;
-  document.getElementById("debug-action").textContent = document.querySelector('input[name="action"]').value;
-  document.getElementById("debug-type").textContent = document.querySelector('input[name="type"]').value;
-  document.getElementById("debug-countryCode").textContent = document.querySelector('input[name="countryCode"]').value;
-  document.getElementById("debug-currencyCode").textContent = document.querySelector('input[name="currencyCode"]').value;
-  document.getElementById("debug-redirectURL").textContent = document.querySelector('input[name="redirectURL"]').value;
-  document.getElementById("debug-cancelURL").textContent = document.querySelector('input[name="cancelURL"]').value;
-}
+    document.getElementById("debug-merchantID").textContent = document.querySelector('input[name="merchantID"]').value;
+    document.getElementById("debug-action").textContent = document.querySelector('input[name="action"]').value;
+    document.getElementById("debug-type").textContent = document.querySelector('input[name="type"]').value;
+    document.getElementById("debug-countryCode").textContent = document.querySelector('input[name="countryCode"]').value;
+    document.getElementById("debug-currencyCode").textContent = document.querySelector('input[name="currencyCode"]').value;
+    document.getElementById("debug-amount").textContent = amountField.value + " (" + amountHidden.value + " pence)";
+    document.getElementById("debug-orderRef").textContent = orderRefField.value;
+    document.getElementById("debug-transactionUnique").textContent = transactionUniqueField.value;
+    document.getElementById("debug-redirectURL").textContent = document.querySelector('input[name="redirectURL"]').value;
+    document.getElementById("debug-cancelURL").textContent = document.querySelector('input[name="cancelURL"]').value;
+  }
   updateDebug();
 
   // Console logging
   console.log("Payment Amount (display):", amountField.value);
   console.log("Payment Amount (raw pence):", amountHidden.value);
-  console.log("Guest Name:", guestField.value);
+  console.log("Guest Name (display only):", guestField.value);
   console.log("Booking Ref:", bookingField.value);
   console.log("Order Ref:", orderRefField.value);
+  console.log("Transaction Unique:", transactionUniqueField.value);
   console.log("Source:", source);
   console.log("Source Ref:", sourceRef);
 
