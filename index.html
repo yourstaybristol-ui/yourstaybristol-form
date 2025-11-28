@@ -47,7 +47,7 @@
   </p>
 
   <div id="form-wrapper">
-    <form action="https://gateway.cardstream.com/direct/" method="POST">	
+    <form action="https://gateway.cardstream.com/hosted/" method="POST">	
       <!-- Payment Amount -->
       <div class="form-row">
         <label for="paymentAmount">Payment Amount:</label>
@@ -74,11 +74,14 @@
 
       <!-- Hidden Cardstream fields -->
       <input type="hidden" name="merchantID" value="283320">
-      <input type="hidden" name="orderRef" id="orderRef">
+      <input type="hidden" name="action" value="SALE">
+      <input type="hidden" name="type" value="1">
+      <input type="hidden" name="countryCode" value="826">
       <input type="hidden" name="currencyCode" value="826">
-      <input type="hidden" name="transactionType" value="SALE">
-      <input type="hidden" name="redirectURL" value="https://yourstaybristol.com/confirmation">
-      <input type="hidden" name="callbackURL" value="https://yourstaybristol.com/callback">
+      <input type="hidden" name="amount" value="12345"> <!-- in pence -->
+      <input type="hidden" name="orderRef" value="ABC123">
+      <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success">
+      <input type="hidden" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed">
 
       <p id="note">
         Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
