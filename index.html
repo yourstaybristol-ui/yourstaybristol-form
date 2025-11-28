@@ -270,18 +270,30 @@
   }
 
   // Update debug block
+
   function updateDebug() {
-    document.getElementById("debug-merchantID").textContent = document.querySelector('input[name="merchantID"]').value;
-    document.getElementById("debug-action").textContent = document.querySelector('input[name="action"]').value;
-    document.getElementById("debug-type").textContent = document.querySelector('input[name="type"]').value;
-    document.getElementById("debug-countryCode").textContent = document.querySelector('input[name="countryCode"]').value;
-    document.getElementById("debug-currencyCode").textContent = document.querySelector('input[name="currencyCode"]').value;
-    document.getElementById("debug-amount").textContent = amountField.value + " (" + amountHidden.value + " pence)";
-    document.getElementById("debug-orderRef").textContent = orderRefField.value;
-    document.getElementById("debug-transactionUnique").textContent = transactionUniqueField.value;
-    document.getElementById("debug-redirectURL").textContent = document.querySelector('input[name="redirectURL"]').value;
-    document.getElementById("debug-cancelURL").textContent = document.querySelector('input[name="cancelURL"]').value;
-  }
+  const fields = [
+    "merchantID",
+    "action",
+    "type",
+    "countryCode",
+    "currencyCode",
+    "amount",
+    "orderRef",
+    "transactionUnique",
+    "redirectURL",
+    "cancelURL"
+  ];
+
+  fields.forEach(field => {
+    const input = document.querySelector(`[name="${field}"]`);
+    const debugSpan = document.getElementById("debug-" + field);
+    if (input && debugSpan) {
+      debugSpan.textContent = input.value || "(empty)";
+      debugSpan.style.color = ""; // reset color in case it was red
+    }
+  });
+}
 
   // Call after all values are set
   
