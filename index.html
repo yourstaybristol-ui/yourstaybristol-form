@@ -142,34 +142,32 @@
       </div>
     </div>
 
-    <!-- Conditional fields injected here -->
+<!-- Hidden Cardstream fields -->
+<input type="hidden" id="merchantID" name="merchantID" value="283320" />
+<input type="hidden" id="action" name="action" value="SALE" />
+<input type="hidden" id="type" name="type" value="1" />
+<input type="hidden" id="countryCode" name="countryCode" value="826" />
+<input type="hidden" id="currencyCode" name="currencyCode" value="826" />
+<input type="hidden" id="amountHidden" name="amount" value="" />
+<input type="hidden" id="orderRef" name="orderRef" value="" />
+<input type="hidden" id="transactionUnique" name="transactionUnique" value="" />
+<input type="hidden" id="redirectURL" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success" />
+<input type="hidden" id="cancelURL" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed" />
 
-    <!-- Hidden Cardstream fields -->
-    <input type="hidden" name="merchantID" value="283320" />
-    <input type="hidden" name="action" value="SALE" />
-    <input type="hidden" name="type" value="1" />
-    <input type="hidden" name="countryCode" value="826" />
-    <input type="hidden" name="currencyCode" value="826" />
-    <input type="hidden" id="amountHidden" name="amount" value="" />
-    <input type="hidden" id="orderRef" name="orderRef" value="" />
-    <input type="hidden" id="transactionUnique" name="transactionUnique" value="" />
-    <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success" />
-    <input type="hidden" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed" />
-
-    <!-- Debug block -->
-    <div id="debug">
-      <strong>Debug Info (Cardstream Payload):</strong><br>
-      <span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span>
-      <span><strong>Action:</strong> <span id="debug-action"></span></span>
-      <span><strong>Type:</strong> <span id="debug-type"></span></span>
-      <span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span>
-      <span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span>
-      <span><strong>Amount:</strong> <span id="debug-amount"></span></span>
-      <span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span>
-      <span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span>
-      <span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span>
-      <span><strong>Cancel URL:</strong> <span id="debug-cancelURL"></span></span>
-    </div>
+<!-- Debug block -->
+<div id="debug">
+  <strong>Debug Info (Cardstream Payload):</strong><br>
+  <span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span><br>
+  <span><strong>Action:</strong> <span id="debug-action"></span></span><br>
+  <span><strong>Type:</strong> <span id="debug-type"></span></span><br>
+  <span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span><br>
+  <span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span><br>
+  <span><strong>Amount:</strong> <span id="debug-amount"></span></span><br>
+  <span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span><br>
+  <span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span><br>
+  <span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span><br>
+  <span><strong>Cancel URL:</strong> <span id="debug-cancelURL"></span></span>
+</div>
 
     <p id="note">
       Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
