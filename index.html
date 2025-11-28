@@ -116,7 +116,8 @@
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <form method="post" action="https://gateway.cardstream.com/hosted">
+  <form id="payment-form" method="post" action="https://gateway.cardstream.com/hosted">
+  <!-- all your inputs and hidden fields -->
     <!-- Payment Amount --> 
     <div class="form-row">
       <label for="paymentAmount">Payment Amount:</label>
@@ -283,28 +284,72 @@
   }
 
   // Call after all values are set
-  updateDebug();
+  
+document.addEventListener("DOMContentLoaded", function() {
+  const proceedBtn = document.getElementById("proceed-btn");
+  const paymentForm = document.getElementById("payment-form");
+  const spinner = document.getElementById("spinner-container");
 
-  // Spinner toggle and debug refresh on Proceed
-  document.getElementById("proceed-btn").addEventListener("click", function(e) {
-  e.preventDefault();
-  document.getElementById("payment-form").style.display = "none";
-  document.getElementById("spinner-container").style.display = "block";
-  updateDebug();
+  if (proceedBtn && paymentForm) {
+    proceedBtn.addEventListener("click", function(e) {
+      e.preventDefault();
 
-  // 🔍 Debug logger: capture all form fields before submission
-  const formData = new FormData(document.getElementById("payment-form"));
-  console.group("Cardstream Payload");
-  for (let [key, value] of formData.entries()) {
-    console.log(key + ": " + value);
+      // Hide form, show spinner
+      paymentForm.style.display = "none";
+      if (spinner) spinner.style.display = "block";
+
+      // Update debug block
+      try {
+        updateDebug();
+      } catch (err) {
+        console.error("updateDebug failed:", err);
+      }
+
+      // 🔍 Validate required hidden fields before submission
+      const requiredFields = ["amount", "orderRef", "transactionUnique"];
+      let missing = [];
+
+      requiredFields.forEach(field => {
+        const el = paymentForm.querySelector(`[name="${field}"]`);
+        if (!el || !el.value) {
+          missing.push(field);
+
+          // Highlight missing field in debug block if span exists
+          const debugSpan = document.getElementById("debug-" + field);
+          if (debugSpan) {
+            debugSpan.style.color = "red";
+            debugSpan.textContent = "(missing)";
+          }
+        }
+      });
+
+      if (missing.length > 0) {
+        console.error("Missing required fields:", missing.join(", "));
+        alert("Cannot proceed: missing " + missing.join(", "));
+        // Restore form visibility so user can fix
+        paymentForm.style.display = "block";
+        if (spinner) spinner.style.display = "none";
+        return; // stop here, do not submit
+      }
+
+      // 🔍 Log payload before submission
+      const formData = new FormData(paymentForm);
+      console.group("Cardstream Payload");
+      for (let [key, value] of formData.entries()) {
+        console.log(key + ": " + value);
+      }
+      console.groupEnd();
+
+      // Submit after short delay
+      setTimeout(() => {
+        console.log("Submitting form now…");
+        paymentForm.submit();
+      }, 500);
+    });
+  } else {
+    console.error("Proceed button or payment form not found in DOM.");
   }
-  console.groupEnd();
-
-  // Proceed with submission after spinner delay
-  setTimeout(() => {
-    document.getElementById("payment-form").submit();
-  }, 500);
 });
-
 </script>
+
 
