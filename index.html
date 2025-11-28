@@ -48,11 +48,12 @@
 
   <div id="form-wrapper">
     <form action="https://gateway.cardstream.com/hosted/" method="POST">	
-      <!-- Payment Amount -->
+
+      <!-- Payment Amount (visible, formatted) -->
       <div class="form-row">
         <label for="paymentAmount">Payment Amount:</label>
         <div class="input-wrapper">
-          <input type="text" id="paymentAmount" name="amount" readonly />
+          <input type="text" id="paymentAmount" readonly />
         </div>
       </div>
 
@@ -60,7 +61,7 @@
       <div class="form-row">
         <label for="guestName">Guest Name:</label>
         <div class="input-wrapper">
-          <input type="text" id="guestName" name="guestName" readonly />
+          <input type="text" id="guestName" readonly />
         </div>
       </div>
 
@@ -68,18 +69,18 @@
       <div class="form-row">
         <label for="bookingRef">YSB Booking Ref:</label>
         <div class="input-wrapper">
-          <input type="text" id="bookingRef" name="bookingRef" readonly />
+          <input type="text" id="bookingRef" readonly />
         </div>
       </div>
 
       <!-- Hidden Cardstream fields -->
+      <input type="hidden" id="amountHidden" name="amount" value="">
       <input type="hidden" name="merchantID" value="283320">
       <input type="hidden" name="action" value="SALE">
       <input type="hidden" name="type" value="1">
       <input type="hidden" name="countryCode" value="826">
       <input type="hidden" name="currencyCode" value="826">
-      <input type="hidden" name="amount" value="12345"> <!-- in pence -->
-      <input type="hidden" name="orderRef" value="ABC123">
+      <input type="hidden" id="orderRef" name="orderRef" value="">
       <input type="hidden" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success">
       <input type="hidden" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed">
 
@@ -139,35 +140,43 @@
       <a href="https://www.yourstaybristol.co.uk/privacy-policy" target="_blank">Privacy Policy</a>
     </p>
     <p>© Your Stay Bristol Ltd</p>
-  </footer>
+  </footer>  
+
 
 <script>
-  // 1. Parse query string
+  // Parse query string
   const params = new URLSearchParams(window.location.search);
 
-  // 2. Prefill fields
-  const amountField = document.getElementById("paymentAmount");
+  // Field references
+  const amountField = document.getElementById("paymentAmount");   // visible
+  const amountHidden = document.getElementById("amountHidden");   // hidden for Cardstream
   const guestField = document.getElementById("guestName");
   const bookingField = document.getElementById("bookingRef");
   const orderRefField = document.getElementById("orderRef");
 
-  if (params.has("paymentAmount")) {
-  const rawAmount = params.get("paymentAmount"); // e.g. "12345"
-  amountField.value = formatCurrency(rawAmount); // display as £123.45
-  document.querySelector('input[name="amount"]').value = rawAmount; // send raw pence
-}
+  // Format currency for display
+  function formatCurrency(pence) {
+    const pounds = (parseInt(pence, 10) / 100).toFixed(2);
+    return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
-function formatCurrency(pence) {
-  const pounds = (parseInt(pence, 10) / 100).toFixed(2);
-  return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-  if (params.has("guestName")) guestField.value = params.get("guestName");
+  // Prefill fields from query string
+  if (params.has("paymentAmount")) {
+    const rawAmount = params.get("paymentAmount"); // e.g. "12345"
+    amountField.value = formatCurrency(rawAmount); // display £123.45
+    amountHidden.value = rawAmount;                // send raw pence
+  }
+
+  if (params.has("guestName")) {
+    guestField.value = params.get("guestName");
+  }
+
   if (params.has("bookingRef")) {
     bookingField.value = params.get("bookingRef");
     orderRefField.value = params.get("bookingRef");
   }
 
-  // ✅ INSERT CONDITIONAL FIELD INJECTION HERE
+  // Conditional source field injection
   const source = params.get("source");
   const sourceRef = params.get("sourceRef");
 
@@ -197,7 +206,7 @@ function formatCurrency(pence) {
     bookingRefRow.insertAdjacentElement("afterend", sourceRow);
   }
 
-  // 3. Update debug block
+  // Update debug block
   function updateDebug() {
     document.getElementById("debug-amount").textContent = amountField.value;
     document.getElementById("debug-guestName").textContent = guestField.value;
@@ -206,15 +215,16 @@ function formatCurrency(pence) {
   }
   updateDebug();
 
-  // 4. Console logging
-  console.log("Payment Amount:", amountField.value);
+  // Console logging
+  console.log("Payment Amount (display):", amountField.value);
+  console.log("Payment Amount (raw pence):", amountHidden.value);
   console.log("Guest Name:", guestField.value);
   console.log("Booking Ref:", bookingField.value);
   console.log("Order Ref:", orderRefField.value);
   console.log("Source:", source);
   console.log("Source Ref:", sourceRef);
 
-  // 5. Spinner toggle
+  // Spinner toggle
   document.getElementById("proceed-btn").addEventListener("click", function() {
     document.querySelector("form").style.display = "none";
     document.getElementById("spinner-container").style.display = "block";
@@ -222,3 +232,5 @@ function formatCurrency(pence) {
     console.log("Proceed clicked. Spinner shown.");
   });
 </script>
+</body>
+</html>
