@@ -312,10 +312,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Update debug block
       try {
-        updateDebug();
-      } catch (err) {
-        console.error("updateDebug failed:", err);
-      }
+  	// Populate hidden fields
+  	document.querySelector('[name="amount"]').value = "17411";
+  	document.querySelector('[name="orderRef"]').value = "75225";
+  	document.querySelector('[name="transactionUnique"]').value = Date.now().toString();
+
+     updateDebug();
+   } catch (err) {
+     console.error("updateDebug failed:", err);
+   }
 
       // 🔍 Validate required hidden fields before submission
       const requiredFields = ["amount", "orderRef", "transactionUnique"];
