@@ -287,11 +287,11 @@
 
   // Spinner toggle and debug refresh on Proceed
   document.getElementById("proceed-btn").addEventListener("click", function(e) {
-    e.preventDefault(); // prevent default form submission
+    e.preventDefault();
     document.querySelector("form").style.display = "none";
     document.getElementById("spinner-container").style.display = "block";
-    updateDebug(); // refresh debug before submission
-    console.log("Proceed clicked. Spinner shown.");
-  });
+    updateDebug();
+    document.querySelector("form").submit(); // actually sends to Cardstream
+});
 </script>
 
