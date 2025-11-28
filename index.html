@@ -117,8 +117,8 @@
   </p>
 
   <form>
-    <!-- Payment Amount -->
-    <form method="post" action="https://gateway.cardstream.com/process">
+    <!-- Payment Amount --> 
+    <form method="post" action="https://gateway.cardstream.com/hosted">
     <div class="form-row">
       <label for="paymentAmount">Payment Amount:</label>
       <div class="input-wrapper">
@@ -287,17 +287,17 @@
   updateDebug();
 
   // Spinner toggle and debug refresh on Proceed
-document.getElementById("proceed-btn").addEventListener("click", function(e) {
-  e.preventDefault(); // prevent default reload
+  document.getElementById("proceed-btn").addEventListener("click", function(e) {
+  e.preventDefault(); // prevent instant submission
   document.querySelector("form").style.display = "none";
   document.getElementById("spinner-container").style.display = "block";
   updateDebug();
 
-  // Submit to Cardstream after short delay
+  // Delay actual submission to allow spinner to show
   setTimeout(() => {
     document.querySelector("form").submit();
-  }, 500);
-});  
+  }, 500); // 500ms is enough for visual feedback
+});
 
 </script>
 
