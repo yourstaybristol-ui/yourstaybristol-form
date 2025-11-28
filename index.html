@@ -155,16 +155,17 @@
   const orderRefField = document.getElementById("orderRef");
 
   // Format currency for display
-  function formatCurrency(pence) {
-    const pounds = (parseInt(pence, 10) / 100).toFixed(2);
+  function formatCurrency(poundsStr) {
+    const pounds = parseFloat(poundsStr).toFixed(2);
     return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   // Prefill fields from query string
   if (params.has("paymentAmount")) {
-    const rawAmount = params.get("paymentAmount"); // e.g. "12345"
-    amountField.value = formatCurrency(rawAmount); // display £123.45
-    amountHidden.value = rawAmount;                // send raw pence
+    const rawAmount = params.get("paymentAmount"); // e.g. "77250.99" (pounds)
+    amountField.value = formatCurrency(rawAmount); // display £77,250.99
+    const penceValue = Math.round(parseFloat(rawAmount) * 100);   // convert to pence
+    amountHidden.value = penceValue;                              // send raw pence
   }
 
   if (params.has("guestName")) {
@@ -208,7 +209,7 @@
 
   // Update debug block
   function updateDebug() {
-    document.getElementById("debug-amount").textContent = amountField.value;
+    document.getElementById("debug-amount").textContent = amountField.value + " (" + amountHidden.value + " pence)";
     document.getElementById("debug-guestName").textContent = guestField.value;
     document.getElementById("debug-bookingRef").textContent = bookingField.value;
     document.getElementById("debug-orderRef").textContent = orderRefField.value;
