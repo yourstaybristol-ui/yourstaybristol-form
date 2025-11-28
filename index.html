@@ -216,7 +216,7 @@ function updateDebug() {
     const debugSpan = document.getElementById("debug-" + field);
     if (input && debugSpan) {
       debugSpan.textContent = input.value || "(empty)";
-      debugSpan.style.color = ""; // reset any red styling
+      debugSpan.style.color = "";
     }
   });
 }
@@ -225,14 +225,14 @@ document.addEventListener("DOMContentLoaded", function() {
   const params = new URLSearchParams(window.location.search);
 
   // Field references
-  const amountField = document.getElementById("paymentAmount");   // visible
-  const amountHidden = document.getElementById("amountHidden");   // hidden for Cardstream
+  const amountField = document.getElementById("paymentAmount");
+  const amountHidden = document.getElementById("amountHidden");
   const guestField = document.getElementById("guestName");
   const bookingField = document.getElementById("bookingRef");
   const orderRefField = document.getElementById("orderRef");
   const transactionUniqueField = document.getElementById("transactionUnique");
 
-  // Prefill fields from query string
+  // Prefill visible and hidden fields
   if (params.has("paymentAmount")) {
     const rawAmount = params.get("paymentAmount");
     amountField.value = formatCurrency(rawAmount);
@@ -244,10 +244,9 @@ document.addEventListener("DOMContentLoaded", function() {
     bookingField.value = params.get("bookingRef");
     orderRefField.value = params.get("bookingRef");
   }
-  // Generate transactionUnique if not supplied
   transactionUniqueField.value = params.get("transactionUnique") || Date.now().toString();
 
-  // Conditional source/sourceRef injection
+  // Optional source/sourceRef injection
   const source = params.get("source");
   const sourceRef = params.get("sourceRef");
   if (source || sourceRef) {
@@ -262,6 +261,9 @@ document.addEventListener("DOMContentLoaded", function() {
     bookingRefRow.insertAdjacentElement("afterend", sourceRow);
   }
 
+  // ✅ Update debug block immediately
+  updateDebug();
+
   // Proceed button handler
   const proceedBtn = document.getElementById("proceed-btn");
   const paymentForm = document.getElementById("payment-form");
@@ -270,7 +272,6 @@ document.addEventListener("DOMContentLoaded", function() {
   if (proceedBtn && paymentForm) {
     proceedBtn.addEventListener("click", function(e) {
       e.preventDefault();
-
       paymentForm.style.display = "none";
       if (spinner) spinner.style.display = "block";
 
@@ -322,5 +323,3 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 </script>
-
-
