@@ -96,13 +96,19 @@
 
     <!-- Debug block -->
     <div id="debug">
-      <strong>Debug Info:</strong><br>
-      Amount: <span id="debug-amount"></span><br>
-      Guest Name: <span id="debug-guestName"></span><br>
-      Booking Ref: <span id="debug-bookingRef"></span><br>
-      Order Ref: <span id="debug-orderRef"></span>
-    </div>
-  </div>
+  	<strong>Debug Info:</strong><br>
+  	Amount: <span id="debug-amount"></span><br>
+  	Guest Name: <span id="debug-guestName"></span><br>
+  	Booking Ref: <span id="debug-bookingRef"></span><br>
+  	Order Ref: <span id="debug-orderRef"></span><br>
+  	Merchant ID: <span id="debug-merchantID"></span><br>
+  	Action: <span id="debug-action"></span><br>
+  	Type: <span id="debug-type"></span><br>
+  	Country Code: <span id="debug-countryCode"></span><br>
+  	Currency Code: <span id="debug-currencyCode"></span><br>
+  	Redirect URL: <span id="debug-redirectURL"></span><br>
+  	Cancel URL: <span id="debug-cancelURL"></span>
+   </div>
 
   <!-- Spinner + redirect message -->
   <div id="spinner-container">
@@ -111,7 +117,7 @@
     <svg class="spinner" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(50,50)">
         <g>
-          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.2s" repeatCount="indefinite"/>
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2.2s" repeatCount="indefinite"/>
           <g fill="#6a1b9a">
             <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" opacity="1"/>
             <rect x="-4" y="-35" width="8" height="20" rx="4" ry="4" transform="rotate(30)" opacity="0.9"/>
@@ -209,11 +215,20 @@
 
   // Update debug block
   function updateDebug() {
-    document.getElementById("debug-amount").textContent = amountField.value + " (" + amountHidden.value + " pence)";
-    document.getElementById("debug-guestName").textContent = guestField.value;
-    document.getElementById("debug-bookingRef").textContent = bookingField.value;
-    document.getElementById("debug-orderRef").textContent = orderRefField.value;
-  }
+  document.getElementById("debug-amount").textContent = amountField.value + " (" + amountHidden.value + " pence)";
+  document.getElementById("debug-guestName").textContent = guestField.value;
+  document.getElementById("debug-bookingRef").textContent = bookingField.value;
+  document.getElementById("debug-orderRef").textContent = orderRefField.value;
+
+  // Hidden fields
+  document.getElementById("debug-merchantID").textContent = document.querySelector('input[name="merchantID"]').value;
+  document.getElementById("debug-action").textContent = document.querySelector('input[name="action"]').value;
+  document.getElementById("debug-type").textContent = document.querySelector('input[name="type"]').value;
+  document.getElementById("debug-countryCode").textContent = document.querySelector('input[name="countryCode"]').value;
+  document.getElementById("debug-currencyCode").textContent = document.querySelector('input[name="currencyCode"]').value;
+  document.getElementById("debug-redirectURL").textContent = document.querySelector('input[name="redirectURL"]').value;
+  document.getElementById("debug-cancelURL").textContent = document.querySelector('input[name="cancelURL"]').value;
+}
   updateDebug();
 
   // Console logging
