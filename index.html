@@ -143,37 +143,6 @@
 
     <!-- Conditional fields injected here -->
 
-  // Conditional Source / SourceRef field injection
-  const source = params.get("source");
-  const sourceRef = params.get("sourceRef");
-
-  if (source || sourceRef) {
-    const bookingRefRow = document.getElementById("bookingRef").closest(".form-row");
-
-    const sourceRow = document.createElement("div");
-    sourceRow.className = "form-row";
-
-    const sourceLabel = document.createElement("label");
-    sourceLabel.setAttribute("for", "sourceField");
-    sourceLabel.textContent = source + " Ref:";
-
-    const sourceWrapper = document.createElement("div");
-    sourceWrapper.className = "input-wrapper";
-
-    const sourceInput = document.createElement("input");
-    sourceInput.type = "text";
-    sourceInput.id = "sourceField";
-    sourceInput.readOnly = true;
-    sourceInput.value = sourceRef || source;
-
-    sourceWrapper.appendChild(sourceInput);
-    sourceRow.appendChild(sourceLabel);
-    sourceRow.appendChild(sourceWrapper);
-
-    // Insert right after the Booking Ref row
-    bookingRefRow.insertAdjacentElement("afterend", sourceRow);
-  }
-
     <!-- Hidden Cardstream fields -->
     <input type="hidden" name="merchantID" value="283320" />
     <input type="hidden" name="action" value="SALE" />
