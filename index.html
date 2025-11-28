@@ -47,7 +47,7 @@
   </p>
 
   <div id="form-wrapper">
-    <form action="<form action="https://gateway.cardstream.com/direct/" method="POST">
+    <form action="https://gateway.cardstream.com/direct/" method="POST">	
       <!-- Payment Amount -->
       <div class="form-row">
         <label for="paymentAmount">Payment Amount:</label>
@@ -73,7 +73,7 @@
       </div>
 
       <!-- Hidden Cardstream fields -->
-      <input type="hidden" name="merchantID" value="YOUR_MERCHANT_ID">
+      <input type="hidden" name="merchantID" value="283320">
       <input type="hidden" name="orderRef" id="orderRef">
       <input type="hidden" name="currencyCode" value="826">
       <input type="hidden" name="transactionType" value="SALE">
@@ -148,11 +148,20 @@
   const bookingField = document.getElementById("bookingRef");
   const orderRefField = document.getElementById("orderRef");
 
-  if (params.has("paymentAmount")) amountField.value = params.get("paymentAmount");
+  if (params.has("paymentAmount")) {
+  const rawAmount = params.get("paymentAmount"); // e.g. "12345"
+  amountField.value = formatCurrency(rawAmount); // display as £123.45
+  document.querySelector('input[name="amount"]').value = rawAmount; // send raw pence
+}
+
+function formatCurrency(pence) {
+  const pounds = (parseInt(pence, 10) / 100).toFixed(2);
+  return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
   if (params.has("guestName")) guestField.value = params.get("guestName");
   if (params.has("bookingRef")) {
     bookingField.value = params.get("bookingRef");
-    orderRefField.value = params.get("bookingRef") + "-YSB";
+    orderRefField.value = params.get("bookingRef");
   }
 
   // ✅ INSERT CONDITIONAL FIELD INJECTION HERE
