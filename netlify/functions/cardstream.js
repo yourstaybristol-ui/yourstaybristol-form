@@ -2,11 +2,10 @@ const crypto = require("crypto");
 const querystring = require("querystring");
 
 exports.handler = async (event) => {
-  // Parse form-encoded body
   const { amount, orderRef } = querystring.parse(event.body || "");
 
-  const merchantID = "testmerchant";
-  const secret = process.env.CARDSTREAM_SECRET;
+  const merchantID = "283320"; // <-- replace with your actual merchant ID
+  const secret = process.env.CARDSTREAM_SECRET; // must match MMS secret exactly
   const currencyCode = "826"; // GBP
   const action = "SALE";
 
@@ -16,14 +15,14 @@ exports.handler = async (event) => {
     amount,
     currencyCode,
     orderRef,
-    type: "card",
+    type: "SALE",
     countryCode: "826",
     transactionUnique: orderRef,
-    redirectURL: "https://yourstaybristol-form.netlify.app/thanks.html",
-    callbackURL: "https://yourstaybristol-form.netlify.app/callback",
+    redirectURL: "https://www.yourstaybristol.co.uk/payment-success",
+    cancelURL: "https://www.yourstaybristol.co.uk/payment-failed",
+    version: "2.00"
   };
 
-  // Create signature
   const signatureString = Object.keys(request)
     .sort()
     .map((key) => `${key}=${request[key]}`)
@@ -36,12 +35,8 @@ exports.handler = async (event) => {
 
   request.signature = signature;
 
-  // Build auto-submitting form
   const formFields = Object.entries(request)
-    .map(
-      ([key, value]) =>
-        `<input type="hidden" name="${key}" value="${value}" />`
-    )
+    .map(([key, value]) => `<input type="hidden" name="${key}" value="${value}" />`)
     .join("");
 
   const html = `
