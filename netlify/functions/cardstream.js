@@ -38,6 +38,12 @@ exports.handler = async (event) => {
   // Add signature to request
   request.signature = signature;
 
+const debugBlock = `
+  <pre>
+  ${Object.entries(request).map(([k,v]) => `${k}=${v}`).join("\n")}
+  </pre>
+`;
+  
   // Build auto-submitting form
   const formFields = Object.entries(request)
     .map(([key, value]) => `<input type="hidden" name="${key}" value="${value}" />`)
