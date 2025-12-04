@@ -15,7 +15,7 @@ exports.handler = async (event) => {
   const request = {
     merchantID,
     action,
-    type: "SALE",
+    type: "1",
     countryCode: "826",
     currencyCode,
     amount,
