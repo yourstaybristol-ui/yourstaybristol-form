@@ -1,78 +1,62 @@
-// netlify/functions/cardstream.js
 const crypto = require("crypto");
-
-const CARDSTREAM_SECRET = process.env.CARDSTREAM_SECRET; // set this in Netlify env vars
-const MERCHANT_ID = "283320";
-const HOSTED_URL = "https://gateway.cardstream.com/hosted/";
-
-function generateTransactionUnique() {
-  const now = new Date();
-  const timestamp = now.toISOString().replace(/[-:TZ.]/g, "").slice(0, 14);
-  const rand = Math.floor(Math.random() * 1000000);
-  return `YSB-UNIQ-${timestamp}-${rand}`;
-}
-
-function formEncode(value) {
-  return encodeURIComponent(String(value)).replace(/%20/g, "+");
-}
-
-function normalizeUrlEncodedNewlines(str) {
-  return str
-    .replace(/%0D%0A/g, "%0A")
-    .replace(/%0A%0D/g, "%0A")
-    .replace(/%0D/g, "%0A");
-}
-
-function buildEncodedStringForSignature(fields) {
-  const keys = Object.keys(fields).filter(k => k !== "signature").sort();
-  const encoded = keys.map(k => `${k}=${formEncode(fields[k])}`).join("&");
-  return normalizeUrlEncodedNewlines(encoded);
-}
-
-function computeSignature(fields, secret) {
-  const toHash = buildEncodedStringForSignature(fields) + secret;
-  return crypto.createHash("sha512").update(toHash, "utf8").digest("hex");
-}
+const querystring = require("querystring");
 
 exports.handler = async (event) => {
-  const body = JSON.parse(event.body || "{}");
-  const amount = body.amount || "100";
-  const orderRef = body.orderRef || "TEST123";
+  // Parse form-encoded body
+  const { amount, orderRef } = querystring.parse(event.body || "");
 
-  const tran = {
-    merchantID: MERCHANT_ID,
-    action: "SALE",
-    type: "SALE",
-    countryCode: "826",
-    currencyCode: "826",
+  const merchantID = "testmerchant";
+  const secret = process.env.CARDSTREAM_SECRET;
+  const currencyCode = "826"; // GBP
+  const action = "SALE";
+
+  const request = {
+    merchantID,
+    action,
     amount,
+    currencyCode,
     orderRef,
-    transactionUnique: generateTransactionUnique(),
-    redirectURL: "https://www.yourstaybristol.co.uk/payment-success",
-    cancelURL: "https://www.yourstaybristol.co.uk/payment-failed",
-    version: "1.00"
+    type: "card",
+    countryCode: "826",
+    transactionUnique: orderRef,
+    redirectURL: "https://yourstaybristol-form.netlify.app/thanks.html",
+    callbackURL: "https://yourstaybristol-form.netlify.app/callback",
   };
 
-  const signature = computeSignature(tran, CARDSTREAM_SECRET);
-  tran.signature = signature;
+  // Create signature
+  const signatureString = Object.keys(request)
+    .sort()
+    .map((key) => `${key}=${request[key]}`)
+    .join("&");
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><title>Redirecting…</title></head>
-<body>
-  <form id="cardstream" action="${HOSTED_URL}" method="POST">
-    ${Object.keys(tran)
-      .map(k => `<input type="hidden" name="${k}" value="${tran[k]}">`)
-      .join("\n    ")}
-    <noscript><button type="submit">Continue</button></noscript>
-  </form>
-  <script>document.getElementById('cardstream').submit();</script>
-</body>
-</html>`;
+  const signature = crypto
+    .createHmac("sha512", secret)
+    .update(signatureString)
+    .digest("hex");
+
+  request.signature = signature;
+
+  // Build auto-submitting form
+  const formFields = Object.entries(request)
+    .map(
+      ([key, value]) =>
+        `<input type="hidden" name="${key}" value="${value}" />`
+    )
+    .join("");
+
+  const html = `
+    <html>
+      <body onload="document.forms[0].submit()">
+        <form action="https://gateway.cardstream.com/hosted/" method="POST">
+          ${formFields}
+        </form>
+      </body>
+    </html>
+  `;
 
   return {
     statusCode: 200,
     headers: { "Content-Type": "text/html" },
-    body: html
+    body: html,
   };
 };
