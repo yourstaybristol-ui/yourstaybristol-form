@@ -178,8 +178,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Prefill from query string
   if (params.has("paymentAmount")) {
     const rawAmount = params.get("paymentAmount");
-    amountField.value = formatCurrency(rawAmount);
-    amountInput.value = Math.round(parseFloat(rawAmount) * 100); // pence
+    amountField.value = formatCurrency(rawAmount); // display £1,100.00
+    amountInput.value = Math.round(parseFloat(rawAmount) * 100); // payload in pence
   }
   if (params.has("guestName")) {
     guestField.value = params.get("guestName");
@@ -187,6 +187,21 @@ document.addEventListener("DOMContentLoaded", function() {
   if (params.has("bookingRef")) {
     bookingField.value = params.get("bookingRef");
     orderRefInput.value = params.get("bookingRef");
+  }
+
+  // Optional source/sourceRef injection
+  const source = params.get("source");     // e.g. "Airbnb" or "Expedia"
+  const sourceRef = params.get("sourceRef"); // e.g. "ABC123"
+  if (source || sourceRef) {
+    const bookingRefRow = bookingField.closest(".form-row");
+    const sourceRow = document.createElement("div");
+    sourceRow.className = "form-row";
+    sourceRow.innerHTML = `
+      <label>${source || "Source"} Ref:</label>
+      <div class="input-wrapper">
+        <input type="text" readonly maxlength="25" value="${sourceRef || ""}" />
+      </div>`;
+    bookingRefRow.insertAdjacentElement("afterend", sourceRow);
   }
 
   // Spinner handling
@@ -199,8 +214,6 @@ document.addEventListener("DOMContentLoaded", function() {
       e.preventDefault();
       paymentForm.style.display = "none";
       if (spinner) spinner.style.display = "block";
-
-      // Submit after short delay
       setTimeout(() => {
         paymentForm.submit();
       }, 500);
