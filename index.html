@@ -116,68 +116,25 @@
     Your Stay Bristol request payment of the amount below for the booking identified by the guest name and reference.
   </p>
 
-  <form id="payment-form" method="post" action="https://gateway.cardstream.com/hosted">
-  <!-- all your inputs and hidden fields -->
-    <!-- Payment Amount --> 
-    <div class="form-row">
-      <label for="paymentAmount">Payment Amount:</label>
-      <div class="input-wrapper">
-        <input type="text" id="paymentAmount" readonly maxlength="25" />
-      </div>
+  <form id="payment-form" method="post" action="https://pay.yourstaybristol.co.uk/">
+  <div class="form-row">
+    <label for="paymentAmount">Payment Amount:</label>
+    <div class="input-wrapper">
+      <input type="text" id="paymentAmount" name="amount" readonly maxlength="25" />
     </div>
+  </div>
 
-    <!-- Guest Name -->
-    <div class="form-row">
-      <label for="guestName">Guest Name:</label>
-      <div class="input-wrapper">
-        <input type="text" id="guestName" readonly maxlength="25" />
-      </div>
+  <div class="form-row">
+    <label for="bookingRef">YSB Booking Ref:</label>
+    <div class="input-wrapper">
+      <input type="text" id="bookingRef" name="orderRef" readonly maxlength="25" />
     </div>
+  </div>
 
-    <!-- Booking Ref -->
-    <div class="form-row">
-      <label for="bookingRef">YSB Booking Ref:</label>
-      <div class="input-wrapper">
-        <input type="text" id="bookingRef" readonly maxlength="25" />
-      </div>
-    </div>
-
-<!-- Hidden Cardstream fields -->
-<input type="hidden" id="merchantID" name="merchantID" value="283320" />
-<input type="hidden" id="action" name="action" value="SALE" />
-<input type="hidden" id="type" name="type" value="1" />
-<input type="hidden" id="countryCode" name="countryCode" value="826" />
-<input type="hidden" id="currencyCode" name="currencyCode" value="826" />
-<input type="hidden" id="amountHidden" name="amount" value="" />
-<input type="hidden" id="orderRef" name="orderRef" value="" />
-<input type="hidden" id="transactionUnique" name="transactionUnique" value="" />
-<input type="hidden" id="redirectURL" name="redirectURL" value="https://www.yourstaybristol.co.uk/payment-success" />
-<input type="hidden" id="cancelURL" name="cancelURL" value="https://www.yourstaybristol.co.uk/payment-failed" />
-
-<!-- Debug block -->
-<div id="debug">
-  <strong>Debug Info (Cardstream Payload):</strong><br>
-  <span><strong>Merchant ID:</strong> <span id="debug-merchantID"></span></span><br>
-  <span><strong>Action:</strong> <span id="debug-action"></span></span><br>
-  <span><strong>Type:</strong> <span id="debug-type"></span></span><br>
-  <span><strong>Country Code:</strong> <span id="debug-countryCode"></span></span><br>
-  <span><strong>Currency Code:</strong> <span id="debug-currencyCode"></span></span><br>
-  <span><strong>Amount:</strong> <span id="debug-amount"></span></span><br>
-  <span><strong>Order Ref:</strong> <span id="debug-orderRef"></span></span><br>
-  <span><strong>Transaction Unique:</strong> <span id="debug-transactionUnique"></span></span>
-  <span><strong>Redirect URL:</strong> <span id="debug-redirectURL"></span></span><br>
-  <span><strong>Cancel URL:</strong> <span id="debug-cancelURL"></span></span>
-</div>
-
-    <p id="note">
-      Click 'Proceed' to continue to our payment solution partner, Cardstream, where you will be asked to enter your card details and make payment.
-      <strong>Please ensure you enter the card billing address</strong> as without a match the transaction will fail.
-    </p>
-
-    <div id="submit-container">
-      <button type="submit" id="proceed-btn">Proceed</button>
-    </div>
-  </form>
+  <div id="submit-container">
+    <button type="submit" id="proceed-btn">Proceed</button>
+  </div>
+</form>
 
   <!-- Spinner -->
   <div id="spinner-container">
@@ -206,65 +163,33 @@ function formatCurrency(poundsStr) {
   return "£" + pounds.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function updateDebug() {
-  const fields = [
-    "merchantID","action","type","countryCode","currencyCode",
-    "amount","orderRef","transactionUnique","redirectURL","cancelURL"
-  ];
-  fields.forEach(field => {
-    const input = document.querySelector(`[name="${field}"]`);
-    const debugSpan = document.getElementById("debug-" + field);
-    if (input && debugSpan) {
-      debugSpan.textContent = input.value || "(empty)";
-      debugSpan.style.color = "";
-    }
-  });
-}
-
 document.addEventListener("DOMContentLoaded", function() {
   const params = new URLSearchParams(window.location.search);
 
-  // Field references
+  // Visible fields
   const amountField = document.getElementById("paymentAmount");
-  const amountHidden = document.getElementById("amountHidden");
-  const guestField = document.getElementById("guestName");
   const bookingField = document.getElementById("bookingRef");
-  const orderRefField = document.getElementById("orderRef");
-  const transactionUniqueField = document.getElementById("transactionUnique");
+  const guestField = document.getElementById("guestName");
 
-  // Prefill visible and hidden fields
+  // Form inputs that actually POST
+  const amountInput = document.querySelector('[name="amount"]');
+  const orderRefInput = document.querySelector('[name="orderRef"]');
+
+  // Prefill from query string
   if (params.has("paymentAmount")) {
     const rawAmount = params.get("paymentAmount");
     amountField.value = formatCurrency(rawAmount);
-    const penceValue = Math.round(parseFloat(rawAmount) * 100);
-    amountHidden.value = penceValue;
+    amountInput.value = Math.round(parseFloat(rawAmount) * 100); // pence
   }
-  if (params.has("guestName")) guestField.value = params.get("guestName");
+  if (params.has("guestName")) {
+    guestField.value = params.get("guestName");
+  }
   if (params.has("bookingRef")) {
     bookingField.value = params.get("bookingRef");
-    orderRefField.value = params.get("bookingRef");
-  }
-  transactionUniqueField.value = params.get("transactionUnique") || Date.now().toString();
-
-  // Optional source/sourceRef injection
-  const source = params.get("source");
-  const sourceRef = params.get("sourceRef");
-  if (source || sourceRef) {
-    const bookingRefRow = bookingField.closest(".form-row");
-    const sourceRow = document.createElement("div");
-    sourceRow.className = "form-row";
-    sourceRow.innerHTML = `
-      <label for="sourceField">${source} Ref:</label>
-      <div class="input-wrapper">
-        <input type="text" id="sourceField" readonly maxlength="25" value="${sourceRef || source}" />
-      </div>`;
-    bookingRefRow.insertAdjacentElement("afterend", sourceRow);
+    orderRefInput.value = params.get("bookingRef");
   }
 
-  // ✅ Update debug block immediately
-  updateDebug();
-
-  // Proceed button handler
+  // Spinner handling
   const proceedBtn = document.getElementById("proceed-btn");
   const paymentForm = document.getElementById("payment-form");
   const spinner = document.getElementById("spinner-container");
@@ -275,51 +200,11 @@ document.addEventListener("DOMContentLoaded", function() {
       paymentForm.style.display = "none";
       if (spinner) spinner.style.display = "block";
 
-      try {
-        updateDebug();
-      } catch (err) {
-        console.error("updateDebug failed:", err);
-      }
-
-      // Validate required hidden fields
-      const requiredFields = ["amount", "orderRef", "transactionUnique"];
-      let missing = [];
-      requiredFields.forEach(field => {
-        const el = paymentForm.querySelector(`[name="${field}"]`);
-        if (!el || !el.value) {
-          missing.push(field);
-          const debugSpan = document.getElementById("debug-" + field);
-          if (debugSpan) {
-            debugSpan.style.color = "red";
-            debugSpan.textContent = "(missing)";
-          }
-        }
-      });
-
-      if (missing.length > 0) {
-        console.error("Missing required fields:", missing.join(", "));
-        alert("Cannot proceed: missing " + missing.join(", "));
-        paymentForm.style.display = "block";
-        if (spinner) spinner.style.display = "none";
-        return;
-      }
-
-      // Log payload before submission
-      const formData = new FormData(paymentForm);
-      console.group("Cardstream Payload");
-      for (let [key, value] of formData.entries()) {
-        console.log(key + ": " + value);
-      }
-      console.groupEnd();
-
       // Submit after short delay
       setTimeout(() => {
-        console.log("Submitting form now…");
         paymentForm.submit();
       }, 500);
     });
-  } else {
-    console.error("Proceed button or payment form not found in DOM.");
   }
 });
 </script>
